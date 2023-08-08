@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="867.0" prefWidth="1432.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="65.0" layoutY="497.0" prefHeight="54.0" prefWidth="186.0" text="NomeGiocatoreCorrente">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="965.0" layoutY="258.0" prefHeight="37.0" prefWidth="171.0" text="Nome Avversario" textAlignment="RIGHT">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Text layoutX="65.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Puntggio GiocatoreC" wrappingWidth="86.939453125">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="1033.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Puntggio Avversario" textAlignment="RIGHT" wrappingWidth="102.716796875" />
+      <HBox layoutX="65.0" layoutY="567.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Carta1" />
+            <Button mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Carta2" />
+            <Button mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Carta3" />
+            <Button mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Carta4" />
+            <Button mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Carta5" />
+            <Button mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Carta6" />
+            <Button mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Carta7" />
+         </children>
+      </HBox>
+      <Button layoutX="623.0" layoutY="258.0" mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="PilaDegliScarti" />
+      <Button layoutX="1173.0" layoutY="258.0" mnemonicParsing="false" prefHeight="278.0" prefWidth="186.0" text="Mazzo" />
+      <HBox layoutX="230.0" layoutY="14.0">
+         <children>
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="219.0" prefWidth="139.0" text="CartaAvversario1" />
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="219.0" prefWidth="139.0" text="CartaAvversario2" />
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="219.0" prefWidth="139.0" text="CartaAvversario3" />
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="219.0" prefWidth="139.0" text="CartaAvversario4" />
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="219.0" prefWidth="139.0" text="CartaAvversario5" />
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="219.0" prefWidth="139.0" text="CartaAvversario6" />
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="219.0" prefWidth="139.0" text="CartaAvversario7" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
