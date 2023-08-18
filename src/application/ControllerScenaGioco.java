@@ -105,9 +105,12 @@ public class ControllerScenaGioco{
 		mazzoCarte.popolaMazzo();
 		mazzoCarte.mischiaMazzo();
 		pilaCarte = new PilaDegliScarti();
-		carteGiocatore = new ArrayList<>(5);
+		carteGiocatore = new ArrayList<>();
 		carteAvversario = new ArrayList<>();
 		numeroTurno = 1;
+		Random rnd = new Random();
+		turnoGiocatore = rnd.nextBoolean();
+		
 		//Dai carte al giocatore
 		for(int i=0; i<manoGiocatore.getChildren().size()-3;i++) {
 	
@@ -320,7 +323,7 @@ public class ControllerScenaGioco{
 			mazzoTerminato = true;
 			checkVittoria(giocatore);
 		}
-		if(puoiPescare) {
+		if(puoiPescare||pescaDaEvento) {
 		if(turnoGiocatore) {
 		if(carteGiocatore.size()>=7) {
 			areaTesto.appendText(giocatore.getNome()+", hai raggiunto il numero massimo di carte in mano!\n");
@@ -343,11 +346,10 @@ public class ControllerScenaGioco{
 		}}else {
 			areaTesto.appendText(">>Hai gia' pescato questo turno<<\n");
 		}
-		if(pescaDaEvento) {
-			pescaDaEvento = false;
-		}else {
+	
 			puoiPescare=false;
-		}
+			pescaDaEvento=false;
+	
 	}
 
 	public void pescaCartaEvento() {
@@ -494,10 +496,10 @@ public class ControllerScenaGioco{
 			case Cavallo :
 				if(pilaCarte.cartaNellaPila().getColore()==Colore.Evento1) {
 					areaTesto.appendText("Prescelto\n");
-					puoiPescare=true;
 					pescaDaEvento = true;
 					areaTesto.appendText("Peschi una carta\n");
 					pescaCarta();
+					pescaDaEvento = false;
 				}else {
 					areaTesto.appendText("Trascelto\n");
 					scartaCarta();
@@ -527,7 +529,6 @@ public class ControllerScenaGioco{
 				}else {
 					areaTesto.appendText("Incoronazione dell'Imperatore\n");
 					areaTesto.appendText("Guadagni 10 punti (non piu' di 45) e peschi una carta\n");
-					puoiPescare=true;
 					pescaDaEvento = true;
 					if(giocatore.getPuntiGiocatore()<35) {
 					giocatore.aggiungiPunti(10);}
@@ -535,6 +536,7 @@ public class ControllerScenaGioco{
 					giocatore.aggiungiPunti(0);} else {
 						giocatore.setPunti(45);
 						pescaCarta();
+						pescaDaEvento = false;
 					}
 				}; break;
 				
@@ -556,10 +558,10 @@ public class ControllerScenaGioco{
 				if(pilaCarte.cartaNellaPila().getColore()==Colore.Evento1) {
 					areaTesto.appendText("Assassinio del Re\n");
 					areaTesto.appendText("Il tuo avversario perde 10 punti e tu peschi una carta\n");
-					puoiPescare=true;
 					pescaDaEvento = true;
 					avversario.aggiungiPunti(-10);
 					pescaCarta();
+					pescaDaEvento = false;
 				}else {
 					areaTesto.appendText("Morte del Re\n");
 					areaTesto.appendText("Il tuo avversario perde 20 punti\n");
@@ -584,9 +586,9 @@ public class ControllerScenaGioco{
 					if(pilaCarte.cartaNellaPila().getColore()==Colore.Evento1) {
 						areaTesto.appendText("Prescelto\n");
 						pescaDaEvento = true;
-						puoiPescare=true;
 						areaTesto.appendText("Peschi una carta\n");
 						pescaCarta();
+						pescaDaEvento = false;
 					}else {
 						areaTesto.appendText("Trascelto\n");
 						areaTesto.appendText("L'avversario scarta una carta\n");
@@ -616,7 +618,6 @@ public class ControllerScenaGioco{
 					}else {
 						areaTesto.appendText("Incoronazione dell'Imperatore\n");
 						areaTesto.appendText("Guadagni 10 punti (non piu' di 45) e peschi una carta\n");
-						puoiPescare=true;
 						pescaDaEvento = true;
 						if(avversario.getPuntiGiocatore()<35) {
 						avversario.aggiungiPunti(10);}
@@ -625,6 +626,7 @@ public class ControllerScenaGioco{
 								avversario.setPunti(45);
 						}
 						pescaCarta();
+						pescaDaEvento = false;
 					}; break;
 					
 				case Regina :
@@ -646,9 +648,9 @@ public class ControllerScenaGioco{
 						areaTesto.appendText("Assassinio del Re\n");
 						areaTesto.appendText("Il tuo avversario perde 10 punti e tu peschi una carta\n");
 						pescaDaEvento = true;
-						puoiPescare=true;
 						giocatore.aggiungiPunti(-10);
 						pescaCarta();
+						pescaDaEvento = false;
 					}else {
 						areaTesto.appendText("Morte del Re\n");
 						areaTesto.appendText("Il tuo avversario perde 20 punti\n");
