@@ -13,14 +13,16 @@ public class Gioco {
 	private Giocatore avversario;
 	private boolean gameOver = false;
 	
-	public Gioco(String giocatore1, String giocatore2){
+	public Gioco(Giocatore giocatore1, Giocatore giocatore2){
 		giocatore = new Giocatore [2];
+		giocatore[0] = giocatore1;
+		giocatore[1] = giocatore2;
 		mazzo = new Mazzo();
 		mazzo.popolaMazzo();
 		mazzo.mischiaMazzo();
 		pila = new PilaDegliScarti();
 	
-		
+	/*	
 		if(giocatore[1].isBot()) {
 			giocatore[0] = new Giocatore(giocatore1);
 			giocatore[1] = new Giocatore("BOT") ;
@@ -28,20 +30,21 @@ public class Gioco {
 			giocatore[0] = new Giocatore(giocatore1);
 			giocatore[1] = new Giocatore(giocatore2) ;
 		}
+		*/
 	}
 	
-	
+	/*
 	public void inizializzaGioco() {
 		
 		//crea la pila, prima carta
-		pila.aggiungiAllaPila(mazzo.getCarta(mazzo.getSize()-1));
-		mazzo.togliCartaDalMazzo();
+		pila.aggiungiAllaPila(mazzo.getCarta(0));
+		mazzo.togliCartaDalMazzo(0);
 		
 		//dai carte ai giocatori
 		for(int i = 0; i<2; i++) {
-			for(int j=0; j<5;j++) {
-			giocatore[i].aggiungiCarta(mazzo.getCarta(mazzo.getSize()-1));
-			mazzo.togliCartaDalMazzo();
+			for(int j=0; j<4;j++) {
+			giocatore[i].aggiungiCarta(mazzo.getCarta(0));
+			mazzo.togliCartaDalMazzo(0);
 			}
 		}
 		Random random = new Random();
@@ -57,49 +60,56 @@ public class Gioco {
 	}
 	
 	public void pescaCarta(Giocatore giocatore) {
-		giocatore.aggiungiCarta(mazzo.getCarta(mazzo.getSize()-1));
-		mazzo.togliCartaDalMazzo();
+		giocatore.aggiungiCarta(mazzo.getCarta(0));
+		mazzo.togliCartaDalMazzo(0);
 		
 	}
+	*/
 	
 	public void inizioTurno() {
-		pescaCarta(giocatoreCorrente);
+		//pescaCarta(giocatoreCorrente);
 	}
 	
-	public void GiocaCarta(Giocatore giocatore, int n){
+	/*
+
+	public void GiocaCarta(Carta cartaSelezionata){
 		
-		Carta cartaDaGiocare = giocatore.getCarta(n);
-		System.out.println("Vuoi giocare questa carta?");
-		//possibile bottone per fare confermare la carta selezionata;
+		
 		Boolean scelta = false;
 		if(scelta == true) {
 			giocatore.scartaCarta(n);
-			pila.aggiungiAllaPila(cartaDaGiocare);
+			pila.aggiungiAllaPila(cartaSelezionata);
 			
-			giocatore.aggiungiPunti(cartaDaGiocare.assegnaPunti());
+			giocatore.aggiungiPunti(cartaSelezionata.assegnaPunti());
 			
-			if(pila.getUltimaCarta().getColore() == cartaDaGiocare.getColore()){
+			if(pila.getUltimaCarta().getColore() == cartaSelezionata.getColore()){
 				giocatore.aggiungiPunti(1);
 			} else {
 				giocatore.aggiungiPunti(0);
 			}
 			
-			if(pila.getUltimaCarta().getCategoria()==cartaDaGiocare.getCategoria()) {
+			if(pila.getUltimaCarta().getCategoria()==cartaSelezionata.getCategoria()) {
 				giocatore.aggiungiPunti(2);
-				evento();
 			}else {
 				giocatore.aggiungiPunti(0);
 			}
 			
+			if(pila.getUltimaCarta().getCategoria()==cartaSelezionata.getCategoria()) {
+				evento();
+			}
 			turnoGiocatore = !turnoGiocatore;
 		} else {
 			System.out.println("Scegli una carta da giocare");
 		}	
 	}
+	*/
 	
 	public void isGameOver() {
 		if(gameOver==true) {
+			Highscore leadboard = new Highscore();
+			leadboard.aggiungiAFile(giocatore);
 			System.exit(0);
+			
 		}
 		
 		if(giocatoreCorrente.getPuntiGiocatore()==30) {
@@ -126,10 +136,11 @@ public class Gioco {
 		
 	}
 	
-	//i System.out.println() sono un indicazione per aggiungere possibili pannelli di testo (o popUp)
+	
 	public void evento() {
+		/*
 		Random randomEvento = new Random();
-		int evento = randomEvento.nextInt(20)+1;
+		int evento = randomEvento.nextInt(25)+1;
 		switch(evento) {
 		case 1: System.out.println("Evento! Pesca una carta!");
 		pescaCarta(giocatoreCorrente); break;
@@ -215,10 +226,8 @@ public class Gioco {
 				avversario.setPunti(0); break;
 			}
 			
-		case 21:  System.out.println("MEGA EVENTO! Entrambi i giocatori pescano 2 carte!");
+		case 21:  System.out.println("Evento! Entrambi i giocatori pescano 1 carta!");
 			pescaCarta(giocatoreCorrente);
-			pescaCarta(giocatoreCorrente);
-			pescaCarta(avversario);
 			pescaCarta(avversario); break;
 		
 		case 22: System.out.println("MEGA EVENTO! PERDI TUTTI I TUOI PUNTI!");
@@ -234,6 +243,9 @@ public class Gioco {
 			avversario.setPunti(25);
 			
 		}
+		*/
 	}
+	
+	
 	
 }

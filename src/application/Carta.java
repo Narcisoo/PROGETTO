@@ -3,7 +3,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 enum Colore{
 	
-	Bianco, Nero;
+	Bianco, Nero, Evento1, Evento2;
 	
 }
 
@@ -18,13 +18,13 @@ enum Categoria{
 public class Carta {
 
 	private Colore coloreCarta;
-	private Categoria categoriCarta;
-	protected String testoCarta;
-
+	private Categoria categoriaCarta;
+	private int puntiCarta;
 	
 	public Carta(Colore colore, Categoria categoria){	
 		this.coloreCarta = colore;
-		this.categoriCarta = categoria;
+		this.categoriaCarta = categoria;
+		assegnaPunti();
 	}
 	
 	
@@ -34,30 +34,60 @@ public class Carta {
 	}
 	
 	public Categoria getCategoria(){	
-		return this.categoriCarta;
+		return this.categoriaCarta;
 	}
 	
-	public int assegnaPunti() {
-		int n = 0;
+	public void assegnaPunti() {
 		switch(getCategoria()) {
-		case Pedone: n =1 ; break;
-		case Alfiere: n = 3; break;
-		case Cavallo: n = 3; break;
-		case Torre: n = 5; break;
-		case Regina: n = 7; break;
-		case Re: n = 10; break;
+		case Pedone: this.puntiCarta =1 ; break;
+		case Alfiere: this.puntiCarta = 3; break;
+		case Cavallo: this.puntiCarta = 3; break;
+		case Torre: this.puntiCarta = 5; break;
+		case Regina: this.puntiCarta = 7; break;
+		case Re: this.puntiCarta = 10; break;
 		}
-		return n;
-		}
-	
-	//nome immagine carta
-	public String toString() {
-		return this.categoriCarta+""+this.coloreCarta+".png";
 	}
 	
-	public void setImmagine() {
-		String nomeImmagine = toString();
-		Image immagine = new Image(nomeImmagine);
-		ImageView immView = new ImageView(immagine);
+	
+	
+	public String infoCarta() {
+		if(this.coloreCarta!=Colore.Bianco&&this.coloreCarta!=Colore.Nero) {
+			return "Evento, "+this.categoriaCarta;
+		}else {
+		return ""+this.categoriaCarta+" "+this.coloreCarta;
+		}
+	}
+	
+	
+	public String immagineCarta() {
+		return "/immagini/"+this.categoriaCarta+""+this.coloreCarta+".png";
+	}
+	
+	public String retro() {
+		return "/immagini/Retro.png";
+	}
+	
+	public Image getImageCarte() {
+		String pathName = immagineCarta();
+		return new Image(Carta.class.getResourceAsStream(pathName));
+	}
+	public Image getImageRetro() {
+		String pathName = retro();
+		return new Image(Carta.class.getResourceAsStream(pathName));
+	}
+	public Image getImageCartaGiocata() {
+		String pathName = retro();
+		return new Image(Carta.class.getResourceAsStream(null));
+	}
+	
+	public int getPuntiCarta() {
+		return this.puntiCarta;
+	}
+	
+	public void setColore(Colore colore){
+		this.coloreCarta = colore;
+	}
+	public void setCategoria(Categoria categoria) {
+		this.categoriaCarta = categoria;
 	}
 }

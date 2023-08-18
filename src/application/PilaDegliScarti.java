@@ -5,20 +5,23 @@ import java.util.ArrayList;
 public class PilaDegliScarti {
 
 	private ArrayList<Carta> pilaDegliScarti;
-	private int carteNellaPila;
-	
 	public PilaDegliScarti() {
 		pilaDegliScarti = new ArrayList<Carta>();
 	}
+
+	public Carta cartaNellaPila(){
+		if (pilaDegliScarti.size()>=1)
+			return pilaDegliScarti.get(pilaDegliScarti.size()-1);
+		else
+		return null;
+	}
+
+	public int getSize() {
+		return pilaDegliScarti.size();
+	}
 	
-	public void aggiungiAllaPila(Carta carta) {
+	public void add(Carta carta) {
 		pilaDegliScarti.add(carta);
-		carteNellaPila++;
 	}
-	
-	public Carta getUltimaCarta(){
-		return pilaDegliScarti.get(carteNellaPila-2);
 	}
-	
-	
-}
+
