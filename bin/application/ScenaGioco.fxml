@@ -4,88 +4,96 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="paneGioco" layoutX="1.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1920.0" style="-fx-background-color: lightslategrey;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ControllerScenaGioco">
+<AnchorPane fx:id="paneGioco" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1600.0" style="-fx-background-color: #5f6579;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ControllerScenaGioco">
    <children>
-      <Label fx:id="nomeGiocatore" layoutX="52.0" layoutY="580.0" prefHeight="43.0" prefWidth="178.0" text="NomeGiocatore">
+      <Label fx:id="nomeGiocatore" layoutX="53.0" layoutY="464.0" prefHeight="43.0" prefWidth="178.0" text="NomeGiocatore" textFill="WHITE" AnchorPane.bottomAnchor="293.0" AnchorPane.rightAnchor="1378.0">
          <font>
             <Font name="Georgia Bold" size="24.0" />
          </font>
-         <effect>
-            <InnerShadow />
-         </effect>
       </Label>
-      <Label fx:id="nomeAvversario" layoutX="55.0" layoutY="371.0" prefHeight="37.0" prefWidth="171.0" text="NomeAvversario">
+      <Label fx:id="nomeAvversario" layoutX="48.0" prefHeight="37.0" prefWidth="171.0" text="NomeAvversario" textFill="WHITE" AnchorPane.rightAnchor="1381.0" AnchorPane.topAnchor="297.0">
          <font>
             <Font name="Georgia Bold" size="24.0" />
          </font>
-         <effect>
-            <InnerShadow />
-         </effect>
       </Label>
-      <HBox fx:id="manoGiocatore" layoutX="65.0" layoutY="567.0" />
-      <HBox fx:id="manoAvversario" layoutX="230.0" layoutY="14.0" />
-      <Label fx:id="punteggioGiocatore" layoutX="52.0" layoutY="549.0" prefHeight="37.0" prefWidth="86.0" text="puntiGiocatore" AnchorPane.leftAnchor="52.0">
+      <Label fx:id="punteggioGiocatore" layoutX="53.0" layoutY="431.0" prefHeight="37.0" prefWidth="86.0" text="puntiGiocatore" textFill="WHITE" AnchorPane.bottomAnchor="332.0" AnchorPane.rightAnchor="1467.0">
          <font>
-            <Font name="System Bold" size="14.0" />
-         </font></Label>
-      <Label fx:id="punteggioAvversario" layoutX="52.0" layoutY="408.0" prefHeight="37.0" prefWidth="101.0" text="puntiAvversario" AnchorPane.leftAnchor="52.0">
+            <Font name="Georgia Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="punteggioAvversario" layoutX="48.0" prefHeight="37.0" prefWidth="101.0" text="puntiAvversario" textFill="WHITE" AnchorPane.rightAnchor="1451.0" AnchorPane.topAnchor="334.0">
          <font>
-            <Font name="System Bold" size="14.0" />
-         </font></Label>
-      <Button fx:id="terminaSessioneButton" layoutX="1762.0" layoutY="460.0" mnemonicParsing="false" onAction="#pausaEsci" style="-fx-background-color: grey;" text="Termina Sessione" textFill="WHITE">
-         <font>
-            <Font name="Georgia Bold" size="12.0" />
-         </font></Button>
-      <HBox fx:id="manoGiocatore" alignment="CENTER" layoutX="93.0" layoutY="557.0" prefHeight="359.0" prefWidth="1666.0" spacing="4.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
-         <children>
-            <ImageView fx:id="carta1" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta2" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta3" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta4" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta5" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta6" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta7" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </HBox>
-      <HBox fx:id="manoAvversario" alignment="CENTER" layoutX="287.0" layoutY="29.0" prefHeight="360.0" prefWidth="1760.0" spacing="4.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="5.0">
-         <children>
-            <ImageView fx:id="carta1av" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta2av" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta3av" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta4av" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta5av" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta6av" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="carta7av" fitHeight="360.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </HBox>
-      <ImageView fx:id="pila" fitHeight="294.0" fitWidth="193.0" layoutX="868.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="347.0" AnchorPane.leftAnchor="868.0" AnchorPane.rightAnchor="859.0" AnchorPane.topAnchor="363.0" />
-      <ImageView fx:id="mazzo" fitHeight="294.0" fitWidth="193.0" layoutX="624.0" layoutY="363.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="343.0" AnchorPane.topAnchor="363.0" />
-      <Button fx:id="classificaButton" layoutX="1754.0" layoutY="500.0" mnemonicParsing="false" onAction="#classifica" style="-fx-background-color: gold;" text="Mostra Leaderboard">
-         <font>
-            <Font name="Georgia Bold" size="12.0" />
-         </font></Button>
-      <Button fx:id="cambiaTurnoButton" alignment="CENTER" contentDisplay="CENTER" layoutX="279.0" layoutY="428.0" mnemonicParsing="false" onAction="#cambiaTurno" prefHeight="91.0" prefWidth="218.0" style="-fx-background-color: darkslateblue;" text="PASSA TURNO" textAlignment="CENTER" textFill="WHITE">
+            <Font name="Georgia Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="resaButton" layoutX="65.0" layoutY="380.0" mnemonicParsing="false" onAction="#resa" prefHeight="39.0" prefWidth="101.0" style="-fx-background-color: #5c0212; -fx-background-radius: 20;" text="Resa" textFill="WHITE" visible="false" AnchorPane.leftAnchor="65.0">
          <font>
             <Font name="Georgia Bold" size="22.0" />
          </font>
-         <effect>
-            <DropShadow spread="0.53">
-               <color>
-                  <Color red="0.045791707932949066" green="0.0383162759244442" blue="0.4868420958518982" />
-               </color>
-            </DropShadow>
-         </effect></Button>
-      <TextArea fx:id="areaTesto" layoutX="1116.0" layoutY="389.0" prefHeight="166.0" prefWidth="497.0" />
+      </Button>
+      <HBox fx:id="manoGiocatore" alignment="CENTER" layoutX="131.0" layoutY="514.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="1330.0" spacing="4.0" AnchorPane.bottomAnchor="3.0">
+         <children>
+            <ImageView fx:id="carta1" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta2" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta3" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta4" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta5" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta6" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta7" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <HBox fx:id="manoAvversario" alignment="CENTER" layoutX="156.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="1330.0" spacing="4.0" AnchorPane.topAnchor="3.0">
+         <children>
+            <ImageView fx:id="carta1av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta2av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta3av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta4av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta5av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta6av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+            <ImageView fx:id="carta7av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <ImageView fx:id="pila" fitHeight="194.0" fitWidth="138.0" layoutX="662.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="mazzo" fitHeight="194.0" fitWidth="138.0" layoutX="505.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="303.0" AnchorPane.leftAnchor="505.0" AnchorPane.rightAnchor="957.0" AnchorPane.topAnchor="303.0" />
+      <Button fx:id="classificaButton" alignment="TOP_CENTER" layoutX="1367.0" layoutY="416.0" mnemonicParsing="false" onAction="#classifica" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: #cfb242; -fx-background-radius: 10;" text="Mostra Classifica" AnchorPane.bottomAnchor="354.0" AnchorPane.rightAnchor="44.0">
+         <font>
+            <Font name="Georgia Bold" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="cambiaTurnoButton" alignment="CENTER" contentDisplay="CENTER" layoutX="264.0" layoutY="371.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cambiaTurno" prefHeight="56.0" prefWidth="204.0" style="-fx-background-color: #383a42; -fx-background-radius: 20;" text="PASSA TURNO" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="373.0" AnchorPane.leftAnchor="264.0">
+         <font>
+            <Font name="Georgia Bold" size="22.0" />
+         </font>
+      </Button>
+      <TextArea fx:id="areaTesto" layoutX="819.0" layoutY="308.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="172.0" prefWidth="497.0" AnchorPane.bottomAnchor="320.0" AnchorPane.rightAnchor="284.0">
+         <font>
+            <Font name="Georgia" size="12.0" />
+         </font>
+      </TextArea>
+      <Label fx:id="codicePartita" layoutX="1432.0" layoutY="337.0" prefHeight="43.0" prefWidth="150.0" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="23.0" />
+         </font>
+      </Label>
+      <Label layoutX="1345.0" layoutY="337.0" prefHeight="36.0" prefWidth="110.0" text="Codice:" textFill="WHITE" AnchorPane.bottomAnchor="427.0" AnchorPane.rightAnchor="145.0">
+         <font>
+            <Font name="Georgia" size="25.0" />
+         </font></Label>
+      <Label fx:id="matchLabel" layoutX="1343.0" layoutY="380.0" text="Match" textFill="WHITE" visible="false">
+         <font>
+            <Font name="Georgia" size="17.0" />
+         </font></Label>
+      <Label fx:id="numeroMatch" layoutX="1397.0" layoutY="380.0" text="nMatch" textFill="WHITE" visible="false">
+         <font>
+            <Font name="Georgia Bold" size="18.0" />
+         </font></Label>
    </children>
    <cursor>
-      <Cursor fx:constant="OPEN_HAND" />
+      <Cursor fx:constant="CLOSED_HAND" />
    </cursor>
 </AnchorPane>

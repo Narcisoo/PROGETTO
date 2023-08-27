@@ -15,6 +15,10 @@ public class PilaDegliScarti {
 		else
 		return null;
 	}
+	
+	public ArrayList<Carta> getPila() {
+		return pilaDegliScarti;
+	}
 
 	public int getSize() {
 		return pilaDegliScarti.size();

@@ -58,6 +58,11 @@ public class Carta {
 		}
 	}
 	
+	public String infoCartaFile() {
+		return ""+this.categoriaCarta+" "+this.coloreCarta;
+		
+	}
+	
 	
 	public String immagineCarta() {
 		return "/immagini/"+this.categoriaCarta+""+this.coloreCarta+".png";

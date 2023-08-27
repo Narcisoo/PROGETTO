@@ -1,10 +1,20 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PipedInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Random;
-
+import java.util.Scanner;
+import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,11 +37,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 
 public class ControllerScenaGioco{
 	@FXML
-	private Button terminaSessioneButton;
+	private Button resaButton;
 	@FXML
 	private HBox manoGiocatore;
 	@FXML
@@ -58,7 +70,14 @@ public class ControllerScenaGioco{
     private AnchorPane paneGioco;
     @FXML 
     private Button scarta;
-   
+    @FXML
+    private Label codicePartita;
+    @FXML
+    private Button loadGameButton;
+    @FXML
+    private Label numeroMatch;
+    @FXML
+    private Label matchLabel;
 
 	
 	private Mazzo mazzoCarte;
@@ -74,6 +93,11 @@ public class ControllerScenaGioco{
 	private int numeroTurno;
 	private boolean puoiPescare=true;
 	private boolean pescaDaEvento = false;
+	private String codice;
+	private static final String nomeFile = "src/Highscore.csv";
+	private boolean isTorneo = false;
+	private int nMatch;
+	
 	
 	private Stage stage;
 	private Scene scene;
@@ -82,7 +106,7 @@ public class ControllerScenaGioco{
 	//mostra nome giocatore, preso dal log in
 	public void displayNomeGiocatore(String username) {
 		nomeGiocatore.setText(username);
-		nomeGiocatore.setTextFill(Color.GREEN);
+		nomeGiocatore.setTextFill(Color.web("#36b36c"));
 		giocatore = new Giocatore(username);
 		punteggioGiocatore.setText(""+giocatore.getPuntiGiocatore()+" Punti");
 	}
@@ -90,13 +114,24 @@ public class ControllerScenaGioco{
 	//mostra nome avversario, preso dal log in
 	public void displayNomeAvversario(String username) {
 		nomeAvversario.setText(username);
-		nomeAvversario.setTextFill(Color.RED);
+		nomeAvversario.setTextFill(Color.web("#408fe3"));
 		avversario = new Giocatore(username);
 		punteggioAvversario.setText(""+avversario.getPuntiGiocatore()+" Punti");
 	}
+	public void setCodice(String codice) {
+		this.codice = codice;
+		codicePartita.setText(codice);
+	}
 
 	//inizia la partita/gioco. Da le carte ai giocatori ed richiama i metodi per impostare le immagini
-	public void startGame() {
+	public void startGame()throws IOException {
+		isTorneo = false;
+		Scanner scf = new Scanner(new File("src/partite/"+codice+"/"+codice+"_new.txt"));
+		while(scf.hasNextLine()) {
+			displayNomeGiocatore(scf.nextLine());
+			displayNomeAvversario(scf.nextLine());
+		}
+		scf.close();
 		areaTesto.setEditable(false);
 		mazzoEventi = new Mazzo();
 		mazzoEventi.popolaMazzoEventi();
@@ -112,7 +147,7 @@ public class ControllerScenaGioco{
 		turnoGiocatore = rnd.nextBoolean();
 		
 		//Dai carte al giocatore
-		for(int i=0; i<manoGiocatore.getChildren().size()-3;i++) {
+		for(int i=0; i<manoGiocatore.getChildren().size()-4;i++) {
 	
 			Carta carta = mazzoCarte.daiCartaInCima();
 			carteGiocatore.add(new Carta(carta.getColore(),carta.getCategoria()));
@@ -124,6 +159,53 @@ public class ControllerScenaGioco{
 			carteAvversario.add(new Carta(carta.getColore(),carta.getCategoria()));
 		}
 		inizializzaImmaginiCarte();
+		pilaCarte.add(mazzoCarte.getCarta());
+		immaginePila();
+		immagineMazzo();
+		areaTesto.setFont(Font.font("Georgia", 12));
+		if(turnoGiocatore) {
+		areaTesto.appendText("Turno ("+numeroTurno+") di: "+giocatore.getNome()+"\n");}
+		else {
+			areaTesto.appendText("Turno ("+numeroTurno+") di: "+avversario.getNome()+"\n");
+		}
+	}
+	
+	
+	public void startGameTorneo(int match)throws IOException {
+		isTorneo = true;
+		matchLabel.setVisible(true);
+		numeroMatch.setVisible(true);
+		nMatch = match;
+		numeroMatch.setText(match+"");
+		resaButton.setVisible(true);
+		areaTesto.setEditable(false);
+		mazzoEventi = new Mazzo();
+		mazzoEventi.popolaMazzoEventi();
+		mazzoEventi.mischiaMazzo();
+		mazzoCarte = new Mazzo();
+		mazzoCarte.popolaMazzo();
+		mazzoCarte.mischiaMazzo();
+		pilaCarte = new PilaDegliScarti();
+		carteGiocatore = new ArrayList<>();
+		carteAvversario = new ArrayList<>();
+		numeroTurno = 1;
+		Random rnd = new Random();
+		turnoGiocatore = rnd.nextBoolean();
+		
+		//Dai carte al giocatore
+		for(int i=0; i<manoGiocatore.getChildren().size()-4;i++) {
+	
+			Carta carta = mazzoCarte.daiCartaInCima();
+			carteGiocatore.add(new Carta(carta.getColore(),carta.getCategoria()));
+		
+		}
+		//dai carte all'avversario
+		for(int i=0; i<manoAvversario.getChildren().size()-4;i++) {
+			Carta carta = mazzoCarte.daiCartaInCima();
+			carteAvversario.add(new Carta(carta.getColore(),carta.getCategoria()));
+		}
+		inizializzaImmaginiCarte();
+		pilaCarte.add(mazzoCarte.getCarta());
 		immaginePila();
 		immagineMazzo();
 		areaTesto.setFont(Font.font("Georgia", 12));
@@ -131,7 +213,7 @@ public class ControllerScenaGioco{
 	}
 	
 	//imposta le immagini delle carte nella mano del giocatore, e il retro in quelle dell'avversario
-	public void inizializzaImmaginiCarte() {
+	public void inizializzaImmaginiCarte()throws IOException {
 		//giocatore
 		if(turnoGiocatore) {
 		for(int i=0; i<carteGiocatore.size();i++) {
@@ -139,7 +221,12 @@ public class ControllerScenaGioco{
 			imageView.setImage(carteGiocatore.get(i).getImageCarte());
 			imageView.setUserData(i);
 			imageView.setOnMouseClicked(event ->{
-				giocaCarta((int)imageView.getUserData());
+				try {
+					giocaCarta((int)imageView.getUserData());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});
 			
 		}
@@ -149,7 +236,12 @@ public class ControllerScenaGioco{
 				imageView.setImage(new Image(Carta.class.getResourceAsStream("/immagini/Retro.png")));
 				imageView.setUserData(i);
 				imageView.setOnMouseClicked(event ->{
-					nullEvent();
+					try {
+						nullEvent();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				});	
 				
 		}
@@ -162,7 +254,12 @@ public class ControllerScenaGioco{
 			imageView.setImage(new Image(Carta.class.getResourceAsStream("/immagini/Retro.png")));
 			imageView.setUserData(i);	
 			imageView.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});
 		}
 		} else {
@@ -171,7 +268,12 @@ public class ControllerScenaGioco{
 				imageView.setImage(carteAvversario.get(i).getImageCarte());
 				imageView.setUserData(i);
 				imageView.setOnMouseClicked(event ->{
-					giocaCarta((int)imageView.getUserData());
+					try {
+						giocaCarta((int)imageView.getUserData());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				});}
 				
 		
@@ -180,11 +282,11 @@ public class ControllerScenaGioco{
 	
 	//imposta l'immagine (e la carta) nella pila degli scarti quando una carta viene giocata
 	public void immaginePila() {
-		pilaCarte.add(mazzoCarte.getCarta());
-		pila.setImage(mazzoCarte.daiCartaInCima().getImageCarte());
+		
+		pila.setImage(pilaCarte.cartaNellaPila().getImageCarte());
 		pila.setOnMouseClicked(event ->{
 			areaTesto.appendText(">>Ultima carta nella pila: "+pilaCarte.cartaNellaPila().infoCarta()+"<<\n");
-			areaTesto.appendText(">>Numero di carte nella pila: "+pilaCarte.getSize()+"<<\n");
+			//areaTesto.appendText(">>Numero di carte nella pila: "+pilaCarte.getSize()+"<<\n");
 			
 		});
 	}
@@ -200,13 +302,18 @@ public class ControllerScenaGioco{
 		mazzo.setImage(new Image(Carta.class.getResourceAsStream("/immagini/Retro.png")));
 		
 		mazzo.setOnMouseClicked(event ->{
-			pescaCarta();
+			try {
+				pescaCarta();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			areaTesto.appendText(">>Carte rimaste nel mazzo: "+mazzoCarte.getSize()+"<<\n");
 		});
 	}
 	
 	//metodo per giocare una carta
-	public void giocaCarta(int i) {
+	public void giocaCarta(int i) throws IOException {
 		if(azioniConcesse) {
 		if(turnoGiocatore) {
 			ImageView imageView =(ImageView) manoGiocatore.getChildren().get(i);
@@ -227,10 +334,20 @@ public class ControllerScenaGioco{
 			ImageView iv =(ImageView) manoGiocatore.getChildren().get(carteGiocatore.size());
 			iv.setImage(null);
 			imageView.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});	
 			iv.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});		
 			inizializzaImmaginiCarte();
 			checkVittoria(giocatore);
@@ -257,10 +374,20 @@ public class ControllerScenaGioco{
 					ImageView iv =(ImageView) manoAvversario.getChildren().get(carteAvversario.size());
 					iv.setImage(null);
 					imageView.setOnMouseClicked(event ->{
-						nullEvent();
+						try {
+							nullEvent();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					});	
 					iv.setOnMouseClicked(event ->{
-						nullEvent();
+						try {
+							nullEvent();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					});	
 				inizializzaImmaginiCarte();
 				checkVittoria(avversario);
@@ -271,7 +398,7 @@ public class ControllerScenaGioco{
 	}
 	
 	//gioca evento 
-	public void giocaEvento(int i) {
+	public void giocaEvento(int i) throws IOException {
 		if(turnoGiocatore) {
 			ImageView imageView =(ImageView) manoGiocatore.getChildren().get(i);
 			setImmaginePila(carteGiocatore.get(i));
@@ -280,15 +407,25 @@ public class ControllerScenaGioco{
 			ImageView iv =(ImageView) manoGiocatore.getChildren().get(carteGiocatore.size());
 			iv.setImage(null);
 			imageView.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});	
 			iv.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});		
 			inizializzaImmaginiCarte();
 			attivaEvento();
 			checkVittoria(giocatore);
-			
+			azioniConcesse = false;
 		} else {
 			ImageView imageView =(ImageView) manoAvversario.getChildren().get(i);
 			setImmaginePila(carteAvversario.get(i));
@@ -297,25 +434,41 @@ public class ControllerScenaGioco{
 			ImageView iv =(ImageView) manoAvversario.getChildren().get(carteAvversario.size());
 			iv.setImage(null);
 			imageView.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});	
 			iv.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});		
 			inizializzaImmaginiCarte();
 			attivaEvento();
 			checkVittoria(avversario);
+			azioniConcesse = false;
 		}
-		azioniConcesse = false;
+		
 	}
 	
 	
 	//metodo per pescare la carta
-	public void pescaCarta() {
+	public void pescaCarta() throws IOException {
 		if(mazzoCarte.getSize()==1) {
 			mazzo.setImage(null);
 			mazzo.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});
 		}
 		if(mazzoCarte.getSize()==0) {
@@ -346,13 +499,14 @@ public class ControllerScenaGioco{
 		}}else {
 			areaTesto.appendText(">>Hai gia' pescato questo turno<<\n");
 		}
-	
+			if(pescaDaEvento==false) {
 			puoiPescare=false;
+			}
 			pescaDaEvento=false;
 	
 	}
 
-	public void pescaCartaEvento() {
+	public void pescaCartaEvento()throws IOException {
 		if(turnoGiocatore) {
 			if(carteGiocatore.size()>=7) {
 				areaTesto.appendText(giocatore.getNome()+", hai raggiunto il numero massimo di carte in mano!\n");
@@ -377,32 +531,21 @@ public class ControllerScenaGioco{
 			}
 	}
 	
-	public void pausaEsci(ActionEvent event) throws IOException {
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaLogIn.fxml"));	
-		root = loader.load();
-		ScenaLogInController controllerLogIn = loader.getController();
-		stage =(Stage)((Node)event.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.centerOnScreen();
-		stage.setResizable(false);
-		stage.show();
-		//javafx.application.Platform.exit();
-	}
 	
-	public void nullEvent() {
+	public void nullEvent()throws IOException {
 		
 	}
 	
-	public void cambiaTurno() {
-		puoiPescare=true;
+	public void cambiaTurno()throws IOException {
+		
 		numeroTurno++;
 		if(azioniConcesse) {
 			areaTesto.appendText("-------------------------------------\n");
 			areaTesto.appendText("DEVI ANCORA GIOCARE UNA CARTA, NON PUOI PASSARE!\n");
 			areaTesto.appendText("-  -  -  -  -  -  -  -  -  -  -  -  -  -\n");
 		} else {
+		puoiPescare=true;
 		turnoGiocatore = !turnoGiocatore;
 		if(turnoGiocatore) {
 			areaTesto.appendText("-------------------------------------\n");
@@ -426,7 +569,7 @@ public class ControllerScenaGioco{
 		areaTesto.appendText("-------------------------------------\n");
 	}
 	
-	public void assegnaPunti(int i) {
+	public void assegnaPunti(int i) throws IOException{
 		if(turnoGiocatore) {
 		giocatore.aggiungiPunti(carteGiocatore.get(i).getPuntiCarta()+checkCarte(carteGiocatore.get(i),pilaCarte.cartaNellaPila()));
 		punteggioGiocatore.setText(""+giocatore.getPuntiGiocatore());
@@ -440,7 +583,7 @@ public class ControllerScenaGioco{
 	}
 	
 	//Controllo carta giocata e carta nella pila per assgnare i punti
-	public int checkCarte(Carta carta, Carta pila) {
+	public int checkCarte(Carta carta, Carta pila) throws IOException{
 		int x = 0;
 			if((carta.getColore()==pila.getColore())&&(carta.getCategoria()==pila.getCategoria())) {
 				areaTesto.appendText("Carta nella pila: "+pila.infoCarta()+"\n");
@@ -478,7 +621,7 @@ public class ControllerScenaGioco{
 	}
 	
 	
-	public void attivaEvento() {
+	public void attivaEvento() throws IOException {
 		
 			areaTesto.appendText("E V E N T O\n");
 			if(turnoGiocatore) {
@@ -535,9 +678,10 @@ public class ControllerScenaGioco{
 					else if(giocatore.getPuntiGiocatore()>=45){
 					giocatore.aggiungiPunti(0);} else {
 						giocatore.setPunti(45);
-						pescaCarta();
-						pescaDaEvento = false;
+						
 					}
+					pescaCarta();
+					pescaDaEvento = false;
 				}; break;
 				
 			case Regina :
@@ -669,7 +813,7 @@ public class ControllerScenaGioco{
 	}
 	
 	
-	public void scartaCarta() {
+	public void scartaCarta()throws IOException {
 		if(turnoGiocatore) {
 			if(carteAvversario.size()>=1) {
 			Random rnd = new Random();
@@ -685,10 +829,20 @@ public class ControllerScenaGioco{
 			ImageView iv =(ImageView) manoAvversario.getChildren().get(carteAvversario.size());
 			iv.setImage(null);
 			imageView.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});	
 			iv.setOnMouseClicked(event ->{
-				nullEvent();
+				try {
+					nullEvent();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			});		
 			inizializzaImmaginiCarte();
 			}} else {
@@ -706,37 +860,569 @@ public class ControllerScenaGioco{
 		ImageView iv =(ImageView) manoGiocatore.getChildren().get(carteGiocatore.size());
 		iv.setImage(null);
 		imageView.setOnMouseClicked(event ->{
-			nullEvent();
+			try {
+				nullEvent();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});	
 		iv.setOnMouseClicked(event ->{
-			nullEvent();
+			try {
+				nullEvent();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});		
 		inizializzaImmaginiCarte();
 				}}
 }
 	
 	
-	public void classifica() {
-		//System.out.println("classifica");
+	public void classifica() throws IOException{
+		try{
+			List<String> classificaOrdinata = leggiEdOrdinaClassifica();
+			List<String> classificaRidotta = classificaOrdinata.subList(0, 20);
+			String classificaTesto = classificaRidotta.stream().collect(Collectors.joining("\n"));
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("CLASSIFICA");
+			alert.initStyle(StageStyle.TRANSPARENT);
+			alert.setHeaderText("Classifica attuale dei migliori top 20");
+			alert.setContentText(classificaTesto);
+			if(alert.showAndWait().get()==ButtonType.OK) {
+				alert.close();
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
+	
+	private List<String> leggiEdOrdinaClassifica() throws IOException {
+        List<String> scores = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomeFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                scores.add(line);
+            }
+        }
+        scores.sort((s1, s2) -> {
+            int score1 = Integer.parseInt(s1.split(",")[1]);
+            int score2 = Integer.parseInt(s2.split(",")[1]);
+            return Integer.compare(score2, score1); 
+        });
+        return scores;
+    }
 	
 	//controlla se il giocatore ha vinto dopo che ha giocato una carta, si è attivato un evento, o è finito il mazzo
 	
-public void checkVittoria(Giocatore g) {
+	public void checkVittoria(Giocatore g) throws IOException {
+		if(!isTorneo) {
 		if(mazzoTerminato) {
-			if(g.getPuntiGiocatore()>avversario.getPuntiGiocatore()) {
+			if(giocatore.getPuntiGiocatore()>avversario.getPuntiGiocatore()) {
 				areaTesto.appendText(giocatore.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
-				System.exit(0);
+				aggiungiAllaClassifica();
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("MAZZO TERMINATO!");
+				alert.setHeaderText("Il Vincitore è: "+giocatore.getNome());
+				alert.setContentText("totalizzando "+giocatore.getPuntiGiocatore()+"Punti!");
+				if(alert.showAndWait().get()==ButtonType.OK) {
+					stage = (Stage)paneGioco.getScene().getWindow();
+					stage.close();
+					File file = new File("src/partite/"+codice+"/"+codice+"_concluso.txt");
+	   				if (!file.exists()) {
+	   					file.createNewFile();
+	   				}
+	   				FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	   				BufferedWriter bw = new BufferedWriter(fw);
+	   				bw.write("Partita #"+codice+" CONCLUSA.\nVincitore: "+giocatore.getNome());
+	   				bw.close();
+	   				fw.close();
+				}
 			}else {
 				areaTesto.appendText(avversario.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
-				System.exit(0);
+				aggiungiAllaClassifica();
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("MAZZO TERMINATO!");
+				alert.setHeaderText("Il Vincitore è: "+avversario.getNome());
+				alert.setContentText("totalizzando "+avversario.getPuntiGiocatore()+"Punti!");
+				if(alert.showAndWait().get()==ButtonType.OK) {
+					stage = (Stage)paneGioco.getScene().getWindow();
+					stage.close();
+					File file = new File("src/partite/"+codice+"/"+codice+"_concluso.txt");
+	   				if (!file.exists()) {
+	   					file.createNewFile();
+	   				}
+	   				FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	   				BufferedWriter bw = new BufferedWriter(fw);
+	   				bw.write("Partita #"+codice+" CONCLUSA.\nVincitore: "+avversario.getNome());
+	   				bw.close();
+	   				fw.close();
+				}
 			}
-		}
+		} 
 		
 		if(g.getPuntiGiocatore()>=50) {
 			areaTesto.appendText(g.getNome()+" e' arrivato a 50 punti e si aggiudica la partiata!\n");
-			javafx.application.Platform.exit();
+			aggiungiAllaClassifica();
+			Alert alert = new Alert(AlertType.INFORMATION);			
+			alert.setTitle("VITTORIA!");
+			alert.setHeaderText("Il Vincitore è: "+g.getNome());
+			alert.setContentText("totalizzando "+g.getPuntiGiocatore()+"Punti!");
+			if(alert.showAndWait().get()==ButtonType.OK) {
+				stage = (Stage)paneGioco.getScene().getWindow();
+				stage.close();
+				File file = new File("src/partite/"+codice+"/"+codice+"_concluso.txt");
+   				if (!file.exists()) {
+   					file.createNewFile();
+   				}
+   				FileWriter fw = new FileWriter(file.getAbsoluteFile());
+   				BufferedWriter bw = new BufferedWriter(fw);
+   				bw.write("Partita #"+codice+" CONCLUSA.\nVincitore: "+g.getNome());
+   				bw.close();
+   				fw.close();
+			}	
+		}
+		
+		}else {
+			if(mazzoTerminato) {
+				if(giocatore.getPuntiGiocatore()>avversario.getPuntiGiocatore()) {
+					areaTesto.appendText(giocatore.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
+					aggiungiAllaClassifica();
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("MAZZO TERMINATO!");
+					alert.setHeaderText("Il Vincitore è: "+giocatore.getNome());
+					alert.setContentText("totalizzando "+giocatore.getPuntiGiocatore()+"Punti!");
+					if(alert.showAndWait().get()==ButtonType.OK) {
+						aggiungiAllaClassifica();
+						FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
+						root = loader.load();
+						ScenaTorneoController torneoController = loader.getController();
+						torneoController.continuaTorneo(codice);
+						torneoController.vincitore(codice, giocatore.getNome(), nMatch);
+						torneoController.salvaInfo(codice);
+						stage = (Stage)paneGioco.getScene().getWindow();
+						scene = new Scene(root);
+						stage.setScene(scene);
+						stage.centerOnScreen();
+						stage.show();
+						stage.setOnCloseRequest(evv -> {
+							evv.consume();
+								try {
+									torneoController.sospendi(stage);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							});
+					}
+				}else {
+					areaTesto.appendText(avversario.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
+					aggiungiAllaClassifica();
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("MAZZO TERMINATO!");
+					alert.setHeaderText("Il Vincitore è: "+avversario.getNome());
+					alert.setContentText("totalizzando "+avversario.getPuntiGiocatore()+"Punti!");
+					if(alert.showAndWait().get()==ButtonType.OK) {
+						aggiungiAllaClassifica();
+						FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
+						root = loader.load();
+						ScenaTorneoController torneoController = loader.getController();
+						torneoController.continuaTorneo(codice);
+						torneoController.vincitore(codice, avversario.getNome(), nMatch);
+						torneoController.salvaInfo(codice);
+						stage = (Stage)paneGioco.getScene().getWindow();
+						scene = new Scene(root);
+						stage.setScene(scene);
+						stage.centerOnScreen();
+						stage.show();
+						stage.setOnCloseRequest(evv -> {
+							evv.consume();
+								try {
+									torneoController.sospendi(stage);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							});
+					}
+				}
+			} 
+			
+			if(g.getPuntiGiocatore()>=50) {
+				areaTesto.appendText(g.getNome()+" e' arrivato a 50 punti e si aggiudica la partiata!\n");
+				aggiungiAllaClassifica();
+				Alert alert = new Alert(AlertType.INFORMATION);			
+				alert.setTitle("VITTORIA!");
+				alert.setHeaderText("Il Vincitore è: "+g.getNome());
+				alert.setContentText("totalizzando "+g.getPuntiGiocatore()+"Punti!");
+				if(alert.showAndWait().get()==ButtonType.OK) {
+					aggiungiAllaClassifica();
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
+					root = loader.load();
+					ScenaTorneoController torneoController = loader.getController();
+					torneoController.continuaTorneo(codice);
+					torneoController.vincitore(codice, g.getNome(), nMatch);
+					torneoController.salvaInfo(codice);
+					stage = (Stage)paneGioco.getScene().getWindow();
+					scene = new Scene(root);
+					stage.setScene(scene);
+					stage.centerOnScreen();
+					stage.show();
+					stage.setOnCloseRequest(evv -> {
+						evv.consume();
+							try {
+								torneoController.sospendi(stage);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						});
+				}	
+			}
+			
 		}
 	}
+
+	public void aggiungiAllaClassifica() throws IOException {
+		Classifica classifica = new Classifica();
+		if(giocatore.getPuntiGiocatore()>0)
+			classifica.aggiornaClassifica(giocatore.getNome(),giocatore.getPuntiGiocatore());
+		if(avversario.getPuntiGiocatore()>0)
+		classifica.aggiornaClassifica(avversario.getNome(), avversario.getPuntiGiocatore());
+	}
+	
+	public void resa(ActionEvent event) throws IOException {
+		String vincitore = "";
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("RESA");
+		alert.setHeaderText("Attento! Hai premuto il pulsante resa!");
+		alert.setContentText("Sei sicuro di voler arrenderti?");
+		File file = new File("src/tornei/"+codice+"/"+codice+"_continua.txt");
+		 if (!file.exists()) {	
+               file.createNewFile();
+           }
+		if(alert.showAndWait().get()==ButtonType.OK) {
+			if(turnoGiocatore) {	
+				vincitore = avversario.getNome();
+			} else {
+				vincitore = giocatore.getNome();
+				}
+			aggiungiAllaClassifica();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
+			root = loader.load();
+			ScenaTorneoController torneoController = loader.getController();
+			torneoController.continuaTorneo(codice);
+			torneoController.vincitore(codice, vincitore, nMatch);
+			torneoController.salvaInfo(codice);
+			stage =(Stage)((Node)event.getSource()).getScene().getWindow();
+			scene = new Scene(root);
+			stage.setScene(scene);
+			stage.centerOnScreen();
+			stage.show();
+			stage.setOnCloseRequest(evv -> {
+				evv.consume();
+					try {
+						torneoController.sospendi(stage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				});
+			
+		}else {
+			
+		}
+	}
+	
+	public void pausaEsci(Stage stage) throws IOException {
+		if(isTorneo==false) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("CONCLUDI PARTITA");
+		alert.setHeaderText("Stai per chiudere l'applicazione e la partita in corso");
+		alert.setContentText("Vuoi salvare ed uscire? Potrai continuare in un secondo momento con il codice partita, dalla schermata del login.");
+		if(alert.showAndWait().get()==ButtonType.OK) {
+			try {
+				String folder = "src/partite/"+codice;
+				File f = new File(folder);
+				f.mkdirs();
+				File file = new File("src/partite/"+codice+"/"+codice+"_info.txt");
+				 if (!file.exists()) {	
+		                file.createNewFile();
+		            }
+				 FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				 BufferedWriter bw = new BufferedWriter(fw);
+				 bw.write(giocatore.getNome()+"\n");
+				 bw.write(giocatore.getPuntiGiocatore()+"\n");
+				 bw.write(avversario.getNome()+"\n");
+				 bw.write(avversario.getPuntiGiocatore()+"\n");
+				 bw.write(numeroTurno+"\n");
+				 bw.write(azioniConcesse+"\n");
+				 bw.write(puoiPescare+"\n");
+				 bw.write(isTorneo+"\n");
+				 bw.close();
+				 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			//----------------------------------------------
+			try {
+				File file = new File("src/partite/"+codice+"/"+codice+"_mazzo.txt");
+				 if (!file.exists()) {	
+		                file.createNewFile();
+		            }
+				 FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				 BufferedWriter bw = new BufferedWriter(fw);
+				 for(Carta carta : mazzoCarte.getMazzo()) {
+					 bw.write(carta.getColore()+","+carta.getCategoria()+"\n");
+					
+				 }
+				 bw.close();
+				 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			//----------------------------------------------
+			try {
+				File file = new File("src/partite/"+codice+"/"+codice+"_mazzoEventi.txt");
+				 if (!file.exists()) {	
+		                file.createNewFile();
+		            }
+				 FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				 BufferedWriter bw = new BufferedWriter(fw);
+				 for(Carta carta : mazzoEventi.getMazzo()) {
+					 bw.write(carta.getColore()+","+carta.getCategoria()+"\n");
+					
+				 }
+				 bw.close();
+				 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			//----------------------------------------------
+			try {
+				File file = new File("src/partite/"+codice+"/"+codice+"_pila.txt");
+				 if (!file.exists()) {	
+		                file.createNewFile();
+		            }
+				 FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				 BufferedWriter bw = new BufferedWriter(fw);
+				 for(Carta carta : pilaCarte.getPila()) {
+					 bw.write(carta.getColore()+","+carta.getCategoria()+"\n");
+					 
+				 }
+				 bw.close();
+				 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			//----------------------------------------------
+			try {
+				File file = new File("src/partite/"+codice+"/"+codice+"_manoGiocatore.txt");
+				 if (!file.exists()) {	
+		                file.createNewFile();
+		            }
+				 FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				 BufferedWriter bw = new BufferedWriter(fw);
+				 for(Carta carta : carteGiocatore) {
+					 bw.write(carta.getColore()+","+carta.getCategoria()+"\n");
+					 
+				 }
+				 bw.close();
+				 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			//----------------------------------------------
+			try {
+				File file = new File("src/partite/"+codice+"/"+codice+"_manoAvversario.txt");
+				 if (!file.exists()) {	
+		                file.createNewFile();
+		            }
+				 FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				 BufferedWriter bw = new BufferedWriter(fw);
+				 for(Carta carta : carteAvversario) {
+					 bw.write(carta.getColore()+","+carta.getCategoria()+"\n");
+					 
+				 }
+				 bw.close();
+				 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			//----------------------------------------------
+			stage = (Stage)paneGioco.getScene().getWindow();
+			stage.close();
+			
+		} else {
+			stage.close();
+		}
+		} else {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("ATTENZIONE");
+			alert.setHeaderText("Questa è una partita da torneo!");
+			alert.setContentText("Le partite di un torneo non possono essere messe in pausa!\nPuoi concludere la partita solo tramite il pulsante RESA.");
+			if(alert.showAndWait().get()==ButtonType.OK){
+				alert.close();
+			} else {
+
+				alert.close();
+			}
+		}
+	}
+	
+	
+	
+
+
+	public void loadGame(String codiceFile)throws IOException, InputMismatchException {
+		try {
+			Scanner scf = new Scanner(new File("src/partite/"+codiceFile+"/"+codiceFile+"_info.txt"));
+			while(scf.hasNextLine()) {
+				setCodice(codiceFile);
+				displayNomeGiocatore(scf.nextLine());
+				giocatore.setPunti(Integer.parseInt(scf.nextLine()));	
+				punteggioGiocatore.setText(""+giocatore.getPuntiGiocatore());
+				displayNomeAvversario(scf.nextLine());	
+				avversario.setPunti(Integer.parseInt(scf.nextLine()));	
+				punteggioAvversario.setText(""+avversario.getPuntiGiocatore());
+				numeroTurno = Integer.parseInt(scf.nextLine());
+				azioniConcesse = Boolean.parseBoolean(scf.nextLine());
+				puoiPescare =Boolean.parseBoolean(scf.nextLine());		
+				isTorneo =Boolean.parseBoolean(scf.nextLine());
+			}
+		}catch(Exception e) {
+			//System.out.println("Errore di conversione");
+			e.printStackTrace();
+		}
+		//----------------------------------------------
+		try {
+			Scanner scf = new Scanner(new File("src/partite/"+codiceFile+"/"+codiceFile+"_mazzo.txt"));
+			mazzoCarte = new Mazzo();
+			while(scf.hasNextLine()) {
+				caricaMazzoDaFile(scf.nextLine());
+			}
+			scf.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		//----------------------------------------------
+				try {
+					Scanner scf = new Scanner(new File("src/partite/"+codiceFile+"/"+codiceFile+"_mazzoEventi.txt"));
+					mazzoEventi = new Mazzo();
+					while(scf.hasNextLine()) {
+						caricaMazzoEventiDaFile(scf.nextLine());
+					}
+					scf.close();
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+		//----------------------------------------------
+		try {
+			Scanner scf = new Scanner(new File("src/partite/"+codiceFile+"/"+codiceFile+"_pila.txt"));
+			pilaCarte = new PilaDegliScarti();
+			while(scf.hasNextLine()) {
+				caricaPilaDaFile(scf.nextLine());
+			}
+			scf.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		//----------------------------------------------
+		try {
+			Scanner scf = new Scanner(new File("src/partite/"+codiceFile+"/"+codiceFile+"_manoGiocatore.txt"));
+			carteGiocatore = new ArrayList<Carta>();
+			while(scf.hasNextLine()) {
+			caricaManoGiocatoreDaFile(scf.nextLine());
+			}
+			scf.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		//----------------------------------------------
+		try {
+			Scanner scf = new Scanner(new File("src/partite/"+codiceFile+"/"+codiceFile+"_manoAvversario.txt"));
+			carteAvversario = new ArrayList<Carta>();
+			while(scf.hasNextLine()) {
+			caricaManoAvversarioDaFile(scf.nextLine());
+			}
+			scf.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		//----------------------------------------------
+		riprendiPartita();
+		
+	}
+	
+	public void caricaMazzoDaFile(String line) {
+		 String[] info = line.split(",");
+		 Carta carta = new Carta(stringToColore(info[0]),stringToCategoria(info[1]));
+		 mazzoCarte.add(carta);
+	}
+
+	public void caricaMazzoEventiDaFile(String line) {
+		 String[] info = line.split(",");
+		 Carta carta = new Carta(stringToColore(info[0]),stringToCategoria(info[1]));
+		 mazzoEventi.add(carta);
+	}
+	
+	public void caricaPilaDaFile(String line) {
+		 String[] info = line.split(",");
+		 Carta carta = new Carta(stringToColore(info[0]),stringToCategoria(info[1]));
+		 pilaCarte.add(carta);
+	}
+	
+	public void caricaManoGiocatoreDaFile(String line) {
+		 String[] info = line.split(",");
+		 Carta carta = new Carta(stringToColore(info[0]),stringToCategoria(info[1]));
+		 carteGiocatore.add(carta);
+		 
+	}
+	public void caricaManoAvversarioDaFile(String line) {
+		 String[] info = line.split(",");
+		 Carta carta = new Carta(stringToColore(info[0]),stringToCategoria(info[1]));
+		 carteAvversario.add(carta);
+		 
+	}
+	
+	public Colore stringToColore(String line) {
+		switch(line) {
+		case "Bianco" : return Colore.Bianco; 
+		case "Nero" : return Colore.Nero; 
+		case "Evento1" : return Colore.Evento1;
+		case "Evento2" : return Colore.Evento2; 
+		}
+		return null;
+	}
+	
+	public Categoria stringToCategoria(String line) {
+		switch(line) {
+		case "Pedone" : return Categoria.Pedone; 
+		case "Alfiere" : return Categoria.Alfiere; 
+		case "Cavallo" : return Categoria.Cavallo; 
+		case "Torre" : return Categoria.Torre; 
+		case "Regina" : return Categoria.Regina; 
+		case "Re" : return Categoria.Re; 
+		}
+		return null;
+	}
+	
+	
+	public void riprendiPartita() throws IOException {
+		inizializzaImmaginiCarte();
+		immaginePila();
+		immagineMazzo();
+		mazzoCarte.mischiaMazzo();
+		mazzoEventi.mischiaMazzo();
+		areaTesto.setEditable(false);
+		areaTesto.setFont(Font.font("Georgia", 12));
+		areaTesto.appendText("Turno ("+numeroTurno+") di: "+giocatore.getNome()+"\n");
+	}
+	
 }
 

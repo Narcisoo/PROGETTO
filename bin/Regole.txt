@@ -1,0 +1,21 @@
+REGOLE BASE:
+- Le partite sono 1 contro 1.
+- Entrambi i giocatori iniziano con 3 carte (Max 7).
+- Si può giocare una sola carta per turno.
+- E' consentito (ma non obbligatorio) pescare una carta per turno, in qualsiasi momento.
+- Ogni carta può essere giocata sopra tutte le altre.
+- Ogni carta ha un suo valore in punti, che ottieni quando la giochi.
+- Se giocherai carte dello stesso colore o della stessa pedina, riceverai punti extra.
+- Se giocherai carte uguali, otterrai una carta Evento.
+- Si vince quando si arriva a 50 punti (o quando si finisce il mazzo vince chi ha più punti).
+
+MODALITA' TORNEO:
+- Quando il torneo viene creato, i giocatori vengono mescolati.
+- Il numero di partecipanti è 8 (sempre partite 1 contro 1).
+- Il torneo è ad eliminazione diretta.
+
+EXTRA:
+- Le partite ed il torneo vengono creati dall'Amministratore.
+- Si può sospendere una partita amichevole in qualsiasi momento.
+- Si può sospendere un torneo solo nella schermata del torneo.
+- Non è possibile sospendere una partita da torneo.

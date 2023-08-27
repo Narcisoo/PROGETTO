@@ -1,0 +1,3 @@
+Bianco,Pedone
+Nero,Cavallo
+Bianco,Torre

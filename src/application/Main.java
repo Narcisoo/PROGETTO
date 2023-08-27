@@ -44,9 +44,3 @@ public class Main extends Application {
 	
 	
 }
-/*
-imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-public void handle(MouseEvent arg0) {
-	//giocaCarta((int)imageView.getUserData());
-	imageView.removeEventHandler(MouseEvent.MOUSE_CLICKED,this);
-*/

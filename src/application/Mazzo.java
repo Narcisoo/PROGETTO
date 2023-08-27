@@ -74,6 +74,9 @@ public class Mazzo {
 	public void mischiaMazzo() {
 		Collections.shuffle(mazzo);
 	}
+	public ArrayList<Carta> getMazzo() {
+		return mazzo;
+	}
 	
 	public Carta daiCartaInCima() {
 		if( mazzo.size()>0)
@@ -150,4 +153,11 @@ public class Mazzo {
 					}
 				carteNelMazzo = mazzo.size();
 	}
+
+	public void add(Carta carta) {
+		mazzo.add(carta);
+	}
+
 }
+
+	

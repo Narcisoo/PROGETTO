@@ -1,0 +1,8 @@
+asd
+0
+ass
+0
+1
+true
+true
+false

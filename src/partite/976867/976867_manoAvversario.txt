@@ -1,0 +1,2 @@
+Bianco,Torre
+Nero,Alfiere

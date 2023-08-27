@@ -2,72 +2,18 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.effect.Blend?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="696.0" prefWidth="1256.0" style="-fx-background-color: Black;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RegoleController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="825.0" style="-fx-background-color: #383a42;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RegoleController">
    <children>
-      <Button fx:id="toLogIn" layoutX="863.0" layoutY="636.0" mnemonicParsing="false" onAction="#toLogIn" prefHeight="45.0" prefWidth="109.0" text="Indietro" />
-      <TextArea editable="false" layoutX="20.0" layoutY="15.0" prefHeight="667.0" prefWidth="550.0" style="-fx-border-color: grey; -fx-border-width: 15;" text="Queste sono le regole degli Spacchi, il gioco di carte più in&#10; voga del momento! Tutto quello che devi fare è VINCERE!&#10;&#10;Ogni carta può essere giocata sopra tutte le altre e da punti quando&#10;viene giocata e come negli scacchi, ogniuna ha un valore in base&#10;all'importanza della pedina!&#10;Attenzione però! Verrai premiato se giocherai correttamente!&#10;Se giocherai carte dello stesso colore o della stessa pedina, riceverai&#10;più punti! Tuttavia, se sarai troppo avido, potresti ricevere delle &#10;brutte sorprese...&#10;&#10;Le partite sono uno contro uno (come negli scacchi del resto),&#10;e per vincere bisogna arrivare a 30 punti, o nel caso che finisca il&#10; mazzo vince chi ha più punti in quel momento.&#10;&#10;          Le carte hanno numero diverso in base all'importanza della&#10;          pedina, quindi attendo a quando la giochi! Se per esempio &#10;          hai un Re in mano magari aspetta a giocarlo, sebbene valga &#10;          parecchi punti, potresti non trovarne più.&#10;&#10;         Per vincere avrai bisogno di un po' di fortuna, ma anche la &#10;strategia non fa male. Ricorda, che se ti succede qualcosa di &#10;negativo, è solo colpa tua!!   BUON DIVERTIMENTO!">
+      <Button fx:id="toLogIn" alignment="BASELINE_LEFT" layoutX="670.0" layoutY="444.0" mnemonicParsing="false" onAction="#toLogIn" prefHeight="45.0" prefWidth="109.0" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 5%;" text="Indietro" textFill="WHITE">
          <font>
-            <Font name="System Italic" size="17.0" />
-         </font>
-      </TextArea>
-      <AnchorPane layoutX="631.0" layoutY="90.0" prefHeight="516.0" prefWidth="574.0" style="-fx-background-color: White;">
-         <children>
-            <ImageView fitHeight="395.0" fitWidth="215.0" layoutX="286.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true" rotate="29.1">
-               <image>
-                  <Image url="@../../../immagini%20carte/CavalloBianco.png" />
-               </image>
-               <effect>
-                  <Blend />
-               </effect>
-            </ImageView>
-            <ImageView fitHeight="295.0" fitWidth="207.0" layoutX="187.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true" rotate="6.0">
-               <image>
-                  <Image url="@../../../immagini%20carte/Retro.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="330.0" fitWidth="244.0" layoutX="50.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true" rotate="-9.5">
-               <image>
-                  <Image url="@../../../immagini%20carte/PedoneBianco.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="588.0" layoutY="34.0" prefHeight="112.0" prefWidth="660.0" text="REGOLE DEGLI SPACCHI" textAlignment="CENTER">
+            <Font name="Georgia" size="18.0" />
+         </font></Button>
+      <Label fx:id="areaTesto" layoutX="21.0" layoutY="12.0" prefHeight="423.0" prefWidth="778.0" text="Label" textFill="WHITE">
          <font>
-            <Font name="System Bold Italic" size="50.0" />
-         </font>
-         <textFill>
-            <LinearGradient endX="0.5071090047393364" endY="0.5829383886255924" startX="0.5071090047393365" startY="0.43601895734597157">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </textFill>
-      </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="579.0" layoutY="555.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="127.0" layoutX="1152.0" layoutY="507.0" stroke="WHITE" strokeType="INSIDE" width="109.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="73.0" layoutX="490.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="120.0" layoutX="-46.0" layoutY="446.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="52.0" layoutX="404.0" layoutY="636.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
+            <Font name="Georgia" size="17.0" />
+         </font></Label>
    </children>
 </AnchorPane>

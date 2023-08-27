@@ -1,40 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: darkslateblue;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ScenaLogInController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383a42;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ScenaLogInController">
    <children>
-      <TextField fx:id="username1" layoutX="102.0" layoutY="111.0" />
-      <TextField fx:id="username2" layoutX="344.0" layoutY="111.0" />
-      <Label layoutX="133.0" layoutY="85.0" text="GIOCATORE 1" textFill="WHITE">
+      <Button fx:id="regole" layoutX="266.0" layoutY="361.0" mnemonicParsing="false" onAction="#regole" prefHeight="26.0" prefWidth="71.0" style="-fx-background-radius: 10% 5% 50% 50%; -fx-background-color: #19244d;" text="Regole" textFill="WHITE" AnchorPane.leftAnchor="266.0" AnchorPane.rightAnchor="266.0">
          <font>
-            <Font size="14.0" />
-         </font></Label>
-      <Label layoutX="375.0" layoutY="86.0" text="GIOCATORE 2" textFill="WHITE">
+            <Font name="Georgia" size="14.0" />
+         </font></Button>
+      <Button fx:id="esci" layoutX="465.0" layoutY="362.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="106.0" style="-fx-background-radius: 10% 5% 50% 5%; -fx-background-color: #19244d;" text="Esci dal gioco" textFill="WHITE" AnchorPane.rightAnchor="37.0">
          <font>
-            <Font size="14.0" />
-         </font></Label>
-      <Button fx:id="logIn" layoutX="280.0" layoutY="334.0" mnemonicParsing="false" onAction="#login" text="Start" />
-      <TextField fx:id="admin" layoutX="226.0" layoutY="247.0" />
-      <PasswordField fx:id="password" layoutX="226.0" layoutY="282.0" />
-      <Label layoutX="253.0" layoutY="221.0" text="Credenziali Admin" textFill="WHITE" />
-      <Button fx:id="regole" layoutX="42.0" layoutY="295.0" mnemonicParsing="false" onAction="#regole" text="Regole" />
-      <Button fx:id="esci" layoutX="522.0" layoutY="322.0" mnemonicParsing="false" onAction="#exit" text="Esci" />
-      <Label layoutX="227.0" layoutY="14.0" text="SPACCHI" textFill="WHITE">
+            <Font name="Georgia" size="14.0" />
+         </font></Button>
+      <Label alignment="CENTER" contentDisplay="TOP" layoutX="205.0" layoutY="14.0" prefHeight="62.0" prefWidth="218.0" text="SPACCHI" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="System Bold" size="35.0" />
+            <Font name="Georgia Bold" size="44.0" />
          </font>
       </Label>
-      <Label fx:id="messaggiSchermo" alignment="CENTER" contentDisplay="CENTER" layoutX="95.0" layoutY="176.0" prefHeight="30.0" prefWidth="401.0" textAlignment="JUSTIFY" textFill="#e10000" textOverrun="CENTER_ELLIPSIS">
+      <Button fx:id="logInToClassificaButton" layoutX="37.0" layoutY="361.0" mnemonicParsing="false" onAction="#classifica" prefHeight="29.0" prefWidth="89.0" style="-fx-background-radius: 10% 5% 5% 50%; -fx-background-color: #19244d;" text="Classifica" textFill="WHITE">
          <font>
-            <Font name="System Bold" size="20.0" />
+            <Font name="Georgia" size="15.0" />
+         </font></Button>
+      <Rectangle arcHeight="60.0" arcWidth="60.0" fill="#74798c" height="126.0" layoutX="12.0" layoutY="89.0" stroke="BLACK" strokeType="INSIDE" width="576.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" />
+      <VBox alignment="TOP_CENTER" layoutX="88.0" layoutY="106.0" prefHeight="59.0" prefWidth="176.0" spacing="10.0" AnchorPane.leftAnchor="88.0">
+         <children>
+            <Label text="Credenziali " textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Georgia" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="adminUsername" />
+            <PasswordField fx:id="adminPassword" />
+         </children>
+      </VBox>
+      <VBox fillWidth="false" layoutX="359.0" layoutY="109.0" prefHeight="90.0" prefWidth="200.0" snapToPixel="false" spacing="10.0" AnchorPane.rightAnchor="42.0">
+         <children>
+            <Button fx:id="amichevole1v1Button" alignment="CENTER" cache="true" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#amichevole" pickOnBounds="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 10% 50% 5% 5%; -fx-border-width: 3; -fx-background-color: #19244d;" text="Amichevole 1v1" textAlignment="CENTER" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+               <font>
+                  <Font name="Georgia" size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="torneo8giocatoriButton" mnemonicParsing="false" onAction="#torneo" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 5%;" text="Torneo 8 giocatori" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="Georgia" size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+      <Label layoutX="265.0" layoutY="88.0" text="ADMIN" textFill="WHITE">
+         <font>
+            <Font name="Georgia Bold" size="18.0" />
          </font>
       </Label>
-      <Button fx:id="leaderboardButton" layoutX="27.0" layoutY="334.0" mnemonicParsing="false" text="Leaderboard" />
+      <Rectangle arcHeight="60.0" arcWidth="60.0" fill="#74798c" height="126.0" layoutX="14.0" layoutY="228.0" stroke="BLACK" strokeType="INSIDE" width="576.0" />
+      <Label layoutX="245.0" layoutY="228.0" text="GIOCATORI" textFill="WHITE">
+         <font>
+            <Font name="Georgia Bold" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="codiceNuovaPartita" layoutX="48.0" layoutY="266.0" prefHeight="25.0" prefWidth="176.0" />
+      <Label layoutX="45.0" layoutY="239.0" text="Nuova Partita / Torneo" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="18.0" />
+         </font></Label>
+      <Button fx:id="nuovaPartitaButton" layoutX="36.0" layoutY="304.0" mnemonicParsing="false" onAction="#nuovaPartita" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 10% 5% 5% 50%; -fx-background-color: #19244d;" text="Nuova Partita" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="19.0" />
+         </font></Button>
+      <Button fx:id="caricaPartitaButton" alignment="CENTER" layoutX="372.0" layoutY="304.0" mnemonicParsing="false" onAction="#caricaPartita" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 5%;" text="Carica Partita" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="19.0" />
+         </font></Button>
+      <TextField fx:id="codiceCaricaPartita" layoutX="384.0" layoutY="266.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="176.0" />
+      <Label layoutX="380.0" layoutY="239.0" text="Carica Partita / Torneo" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="18.0" />
+         </font></Label>
+      <Line endX="10.0" endY="-54.0" layoutX="300.0" layoutY="307.0" startX="10.0" startY="47.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" />
    </children>
 </AnchorPane>
