@@ -330,7 +330,8 @@ public class ScenaTorneoController {
 			alert.close();
 		}}
     	else {
-    		stage.close();
+    		stage=(Stage)paneTorneo.getScene().getWindow();
+			stage.close();
     	}
     }
     
@@ -349,11 +350,12 @@ public class ScenaTorneoController {
 			}
 			bw.close();
 			fw.close();
-			stage=(Stage)paneTorneo.getScene().getWindow();
+			stage =(Stage)((Node)event.getSource()).getScene().getWindow();
 			stage.close();
 		} else {
 			alert.close();
 		}} else {
+			stage =(Stage)((Node)event.getSource()).getScene().getWindow();
 			stage.close();
 		}
     }

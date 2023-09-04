@@ -989,6 +989,10 @@ public class ControllerScenaGioco{
 		}
 		
 		}else {
+			File file = new File("src/tornei/"+codice+"/"+codice+"_continua.txt");
+			 if (!file.exists()) {	
+	               file.createNewFile();
+	           }
 			if(mazzoTerminato) {
 				if(giocatore.getPuntiGiocatore()>avversario.getPuntiGiocatore()) {
 					areaTesto.appendText(giocatore.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");

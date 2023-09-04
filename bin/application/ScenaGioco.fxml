@@ -47,7 +47,7 @@
             <ImageView fx:id="carta7" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
-      <HBox fx:id="manoAvversario" alignment="CENTER" layoutX="156.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="1330.0" spacing="4.0" AnchorPane.topAnchor="3.0">
+      <HBox fx:id="manoAvversario" alignment="CENTER" layoutX="131.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="1330.0" spacing="4.0" AnchorPane.topAnchor="3.0">
          <children>
             <ImageView fx:id="carta1av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
             <ImageView fx:id="carta2av" fitHeight="281.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
