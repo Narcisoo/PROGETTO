@@ -1,3 +1,0 @@
-Nero,Pedone
-Bianco,Torre
-Bianco,Pedone

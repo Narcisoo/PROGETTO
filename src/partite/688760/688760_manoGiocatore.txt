@@ -1,4 +1,0 @@
-Nero,Pedone
-Nero,Re
-Nero,Torre
-Evento2,Alfiere

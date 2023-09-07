@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import org.apache.commons.io.FileUtils;
 import java.util.stream.Collectors;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,6 +45,8 @@ public class ScenaLogInController {
 	Button nuovaPartitaButton;
 	@FXML
 	Button caricaPartitaButton;
+	@FXML
+	Button elimina;
 	
 	private Stage stage;
 	private Scene scene;
@@ -62,8 +64,10 @@ public class ScenaLogInController {
 		File partitaTorneo = new File("src/tornei/"+codiceNuova+"/"+codiceNuova+"_new.txt");
 		File partitaInCorso = new File("src/partite/"+codiceNuova+"/"+codiceNuova+"_info.txt");
 		File torneoInCorso = new File("src/tornei/"+codiceNuova+"/"+codiceNuova+"_continua.txt");
+		File partitaConclusa = new File("src/partite/"+codiceNuova+"/"+codiceNuova+"_concluso.txt");
+		File torneoConcluso = new File("src/tornei/"+codiceNuova+"/"+codiceNuova+"_concluso.txt");
 		
-		if(partitaAmichevole.exists()&&!partitaInCorso.exists()) {
+		if(partitaAmichevole.exists()&&!partitaInCorso.exists()&&!partitaConclusa.exists()) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaGioco.fxml"));	
 		root = loader.load();
 		ControllerScenaGioco controllerScenaGioco = loader.getController();
@@ -81,7 +85,7 @@ public class ScenaLogInController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}});
-		} else if(partitaTorneo.exists()&&!torneoInCorso.exists()){
+		} else if(partitaTorneo.exists()&&!torneoInCorso.exists()&&!torneoConcluso.exists()){
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
 			root = loader.load();
 			ScenaTorneoController torneoController = loader.getController();
@@ -103,7 +107,7 @@ public class ScenaLogInController {
 		} else {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("CODICE NON VALIDO");
-				alert.setHeaderText("Non esiste nessuna partita o torneo da giocare con tale codice.");
+				alert.setHeaderText("Non esiste nessuna partita o torneo da giocare con tale codice oppure sono già conclusi.");
 				alert.setContentText("Se la parita o il torneo sono stati salvati, inserisci il codice nella sezione 'Carica Partita'.\nSe il problema persiste allora la partita o il torneo sono già conclusi.\nSe non"
 						+ "è questo il caso, rivolgersi all'amministratore.");
 				if(alert.showAndWait().get()==ButtonType.OK){
@@ -283,6 +287,38 @@ public class ScenaLogInController {
 	        return scores;
 	    }
 	
+	 
+	 public void eliminaSalvataggi() throws IOException {
+		 if(adminUsername.getText().equals(adminUser)&&adminPassword.getText().equals(adminPass)){
+			 Alert alert = new Alert(AlertType.CONFIRMATION);
+			 alert.setTitle("Eliminazione dati salvati");
+			 alert.setHeaderText("Stai per eliminare tutte le partite ed i tornei in corso!");
+			 alert.setContentText("Sei sicuro di voler continuare?");
+				if(alert.showAndWait().get()==ButtonType.OK){
+				File dirPartite = new File("src/partite");
+				File dirTorneo = new File("src/tornei");
+				 FileUtils.cleanDirectory(dirPartite); 
+				 FileUtils.cleanDirectory(dirTorneo); 
+				} else {
+					alert.close();
+				}
+			
+		 }else {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Credenziali Errate");
+				alert.setHeaderText("Username o Password errati!");
+				alert.setContentText("Solo l'admin può cancellare le partite in corso o concluse");
+				if(alert.showAndWait().get()==ButtonType.OK){
+					alert.close();
+				} else {
+
+					alert.close();
+				}
+			}
+	 }
+	 
+	 
+	 
 }
 		
 

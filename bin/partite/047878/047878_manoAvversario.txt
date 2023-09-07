@@ -1,6 +1,0 @@
-Bianco,Pedone
-Bianco,Pedone
-Bianco,Cavallo
-Bianco,Torre
-Evento2,Re
-Nero,Cavallo

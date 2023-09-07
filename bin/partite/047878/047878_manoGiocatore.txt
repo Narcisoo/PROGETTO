@@ -1,3 +1,0 @@
-Bianco,Pedone
-Evento2,Alfiere
-Nero,Pedone

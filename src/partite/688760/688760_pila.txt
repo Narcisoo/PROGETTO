@@ -1,5 +1,0 @@
-Bianco,Pedone
-Bianco,Pedone
-Bianco,Pedone
-Nero,Regina
-Nero,Pedone

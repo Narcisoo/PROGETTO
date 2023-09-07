@@ -1,4 +1,0 @@
-Nero,Pedone
-Bianco,Pedone
-Evento2,Torre
-Bianco,Re

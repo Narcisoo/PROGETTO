@@ -14,10 +14,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383a42;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ScenaLogInController">
    <children>
-      <Button fx:id="regole" layoutX="266.0" layoutY="361.0" mnemonicParsing="false" onAction="#regole" prefHeight="26.0" prefWidth="71.0" style="-fx-background-radius: 10% 5% 50% 50%; -fx-background-color: #19244d;" text="Regole" textFill="WHITE" AnchorPane.leftAnchor="266.0" AnchorPane.rightAnchor="266.0">
-         <font>
-            <Font name="Georgia" size="14.0" />
-         </font></Button>
       <Button fx:id="esci" layoutX="465.0" layoutY="362.0" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="106.0" style="-fx-background-radius: 10% 5% 50% 5%; -fx-background-color: #19244d;" text="Esci dal gioco" textFill="WHITE" AnchorPane.rightAnchor="37.0">
          <font>
             <Font name="Georgia" size="14.0" />
@@ -43,7 +39,7 @@
             <PasswordField fx:id="adminPassword" />
          </children>
       </VBox>
-      <VBox fillWidth="false" layoutX="359.0" layoutY="109.0" prefHeight="90.0" prefWidth="200.0" snapToPixel="false" spacing="10.0" AnchorPane.rightAnchor="42.0">
+      <VBox fillWidth="false" layoutX="348.0" layoutY="107.0" prefHeight="90.0" prefWidth="200.0" snapToPixel="false" spacing="10.0" AnchorPane.rightAnchor="52.0">
          <children>
             <Button fx:id="amichevole1v1Button" alignment="CENTER" cache="true" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#amichevole" pickOnBounds="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 10% 50% 5% 5%; -fx-border-width: 3; -fx-background-color: #19244d;" text="Amichevole 1v1" textAlignment="CENTER" textFill="WHITE">
                <cursor>
@@ -96,5 +92,14 @@
             <Font name="Georgia" size="18.0" />
          </font></Label>
       <Line endX="10.0" endY="-54.0" layoutX="300.0" layoutY="307.0" startX="10.0" startY="47.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" />
+      <Button fx:id="regole1" layoutX="267.0" layoutY="363.0" mnemonicParsing="false" onAction="#regole" prefHeight="26.0" prefWidth="71.0" style="-fx-background-radius: 10% 5% 50% 50%; -fx-background-color: #19244d;" text="Regole" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="elimina" layoutX="547.0" layoutY="183.0" mnemonicParsing="false" onAction="#eliminaSalvataggi" prefHeight="29.0" prefWidth="32.0" style="-fx-background-radius: 50% 50% 50% 50%; -fx-background-color: #4a0202;" text="X" textFill="WHITE" AnchorPane.leftAnchor="547.0" AnchorPane.rightAnchor="21.0">
+         <font>
+            <Font name="Georgia" size="14.0" />
+         </font></Button>
    </children>
 </AnchorPane>

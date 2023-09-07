@@ -1,8 +1,0 @@
-Enrico
-47
-Elisa
-31
-22
-true
-false
-false

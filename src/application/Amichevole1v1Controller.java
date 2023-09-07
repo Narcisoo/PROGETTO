@@ -40,10 +40,10 @@ public class Amichevole1v1Controller {
 		
    public void creaAmichevole(ActionEvent event) throws IOException {
 
-    	if(giocatore1.getText().isBlank()|| giocatore2.getText().isBlank()) {
+    	if((giocatore1.getText().isBlank()||giocatore1.getText().equals("BOT"))|| giocatore2.getText().isBlank()) {
     			Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Username mancante");
-				alert.setHeaderText("Inserisci i nomi di entrambi i giocatori");
+				alert.setHeaderText("Inserisci i nomi di entrambi i giocatori. Se vuoi giocare contro un bot, inserisci 'BOT' come giocatore2. Il giocatore 1 non può essere un bot");
 				alert.setContentText("A fine partita i nomi verranno aggiunti alla classifica");
 				if(alert.showAndWait().get()==ButtonType.OK){
 					alert.close();

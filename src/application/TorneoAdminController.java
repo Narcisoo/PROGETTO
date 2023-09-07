@@ -79,8 +79,8 @@ public class TorneoAdminController {
 		    	if(checkNull()) {
 		    			Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setTitle("Giocatore Mancante");
-						alert.setHeaderText("Mancano uno o più nomi");
-						alert.setContentText("Assicurati che tutti gli spazi a disposizione siano compilati");
+						alert.setHeaderText("Mancano uno o più nomi o sono presnti dei bot");
+						alert.setContentText("Assicurati che tutti gli spazi a disposizione siano compilati e che non ci siano bot");
 						if(alert.showAndWait().get()==ButtonType.OK){
 							alert.close();
 						} else {
@@ -121,21 +121,21 @@ public class TorneoAdminController {
 			public boolean checkNull() {
 				giocatoreAssente = false;
 				
-				if(T0.getText().isBlank())
+				if(T0.getText().isBlank()||T0.getText().equals("BOT"))
 					giocatoreAssente = true;
-				if(T1.getText().isBlank())
+				if(T1.getText().isBlank()||T1.getText().equals("BOT"))
 					giocatoreAssente = true;
-				if(T2.getText().isBlank())
+				if(T2.getText().isBlank()||T2.getText().equals("BOT"))
 					giocatoreAssente = true;
-				if(T3.getText().isBlank())
+				if(T3.getText().isBlank()||T3.getText().equals("BOT"))
 					giocatoreAssente = true;
-				if(T4.getText().isBlank())
+				if(T4.getText().isBlank()||T4.getText().equals("BOT"))
 					giocatoreAssente = true;
-				if(T5.getText().isBlank())
+				if(T5.getText().isBlank()||T5.getText().equals("BOT"))
 					giocatoreAssente = true;
-				if(T6.getText().isBlank())
+				if(T6.getText().isBlank()||T6.getText().equals("BOT"))
 					giocatoreAssente = true;
-				if(T7.getText().isBlank())
+				if(T7.getText().isBlank()||T7.getText().equals("BOT"))
 					giocatoreAssente = true;
 				
 				return giocatoreAssente;

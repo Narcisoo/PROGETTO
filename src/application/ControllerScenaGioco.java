@@ -97,7 +97,7 @@ public class ControllerScenaGioco{
 	private static final String nomeFile = "src/Highscore.csv";
 	private boolean isTorneo = false;
 	private int nMatch;
-	
+	private boolean isBot = false;
 	
 	private Stage stage;
 	private Scene scene;
@@ -117,7 +117,10 @@ public class ControllerScenaGioco{
 		nomeAvversario.setTextFill(Color.web("#408fe3"));
 		avversario = new Giocatore(username);
 		punteggioAvversario.setText(""+avversario.getPuntiGiocatore()+" Punti");
+		if(avversario.getNome().equals("BOT"))
+			isBot = true;
 	}
+	
 	public void setCodice(String codice) {
 		this.codice = codice;
 		codicePartita.setText(codice);
@@ -143,9 +146,12 @@ public class ControllerScenaGioco{
 		carteGiocatore = new ArrayList<>();
 		carteAvversario = new ArrayList<>();
 		numeroTurno = 1;
+		if(!isBot) {
 		Random rnd = new Random();
 		turnoGiocatore = rnd.nextBoolean();
-		
+		} else {
+			turnoGiocatore = true;
+		}
 		//Dai carte al giocatore
 		for(int i=0; i<manoGiocatore.getChildren().size()-4;i++) {
 	
@@ -191,8 +197,6 @@ public class ControllerScenaGioco{
 		numeroTurno = 1;
 		Random rnd = new Random();
 		turnoGiocatore = rnd.nextBoolean();
-		
-		//Dai carte al giocatore
 		for(int i=0; i<manoGiocatore.getChildren().size()-4;i++) {
 	
 			Carta carta = mazzoCarte.daiCartaInCima();
@@ -239,15 +243,14 @@ public class ControllerScenaGioco{
 					try {
 						nullEvent();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				});	
 				
 		}
 		}	
-		// i<carteAvversario.size()	
 		//avversario	
+		if(!isBot) {
 		if(turnoGiocatore){
 		for(int i=0;i<carteAvversario.size();i++) {
 			ImageView imageView = (ImageView) manoAvversario.getChildren().get(i);
@@ -257,7 +260,6 @@ public class ControllerScenaGioco{
 				try {
 					nullEvent();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
@@ -271,13 +273,26 @@ public class ControllerScenaGioco{
 					try {
 						giocaCarta((int)imageView.getUserData());
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				});}
 				
 		
 			}
+		} else {
+			for(int i=0;i<carteAvversario.size();i++) {
+				ImageView imageView = (ImageView) manoAvversario.getChildren().get(i);
+				imageView.setImage(new Image(Carta.class.getResourceAsStream("/immagini/Retro.png")));
+				imageView.setUserData(i);	
+				imageView.setOnMouseClicked(event ->{
+					try {
+						nullEvent();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+			}
+		}
 		}
 	
 	//imposta l'immagine (e la carta) nella pila degli scarti quando una carta viene giocata
@@ -354,7 +369,7 @@ public class ControllerScenaGioco{
 			}
 			//cambiaTurno();	
 		} else {if(!turnoGiocatore) {
-
+					
 					ImageView imageView =(ImageView) manoAvversario.getChildren().get(i);
 					if((carteAvversario.get(i).getColore()==Colore.Evento1&&pilaCarte.cartaNellaPila().getColore()==Colore.Bianco)&&(carteAvversario.get(i).getCategoria()==pilaCarte.cartaNellaPila().getCategoria())){
 						giocaEvento(i);
@@ -547,6 +562,8 @@ public class ControllerScenaGioco{
 		} else {
 		puoiPescare=true;
 		turnoGiocatore = !turnoGiocatore;
+		inizializzaImmaginiCarte();
+		azioniConcesse=true;
 		if(turnoGiocatore) {
 			areaTesto.appendText("-------------------------------------\n");
 			areaTesto.appendText("Turno ("+numeroTurno+") di "+giocatore.getNome()+"\n");
@@ -561,10 +578,20 @@ public class ControllerScenaGioco{
 			areaTesto.appendText(avversario.getNome()+": "+avversario.getPuntiGiocatore()+" \t"+giocatore.getNome()+": "+giocatore.getPuntiGiocatore()+" \n");
 			areaTesto.appendText("Carta attuale nella Pila: "+pilaCarte.cartaNellaPila().infoCarta()+"\n");
 			areaTesto.appendText("-  -  -  -  -  -  -  -  -  -  -  -  -  -\n");
+			if(isBot) {
+				pescaCarta();
+				for(int i=0; i<carteAvversario.size();i++) {
+					if((carteAvversario.get(i).getCategoria()!=pilaCarte.cartaNellaPila().getCategoria()||carteAvversario.get(i).getColore()!=pilaCarte.cartaNellaPila().getColore())&&(carteAvversario.get(i).getColore()!=Colore.Evento1&&carteAvversario.get(i).getColore()!=Colore.Evento2)) {
+						giocaCarta(i);
+						break;
+					} else {
+						continue;
+					}
+					
+				}
+				cambiaTurno();
+			}
 		}
-		inizializzaImmaginiCarte();
-		//pescaCarta();
-		azioniConcesse=true;
 		}
 		areaTesto.appendText("-------------------------------------\n");
 	}
@@ -1300,7 +1327,6 @@ public class ControllerScenaGioco{
 				isTorneo =Boolean.parseBoolean(scf.nextLine());
 			}
 		}catch(Exception e) {
-			//System.out.println("Errore di conversione");
 			e.printStackTrace();
 		}
 		//----------------------------------------------
@@ -1418,6 +1444,11 @@ public class ControllerScenaGioco{
 	
 	
 	public void riprendiPartita() throws IOException {
+		if(turnoGiocatore) {
+			areaTesto.appendText("Turno ("+numeroTurno+") di: "+giocatore.getNome()+"\n");
+			} else { 
+				areaTesto.appendText("Turno ("+numeroTurno+") di: "+avversario.getNome()+"\n");
+			}
 		inizializzaImmaginiCarte();
 		immaginePila();
 		immagineMazzo();
@@ -1425,7 +1456,7 @@ public class ControllerScenaGioco{
 		mazzoEventi.mischiaMazzo();
 		areaTesto.setEditable(false);
 		areaTesto.setFont(Font.font("Georgia", 12));
-		areaTesto.appendText("Turno ("+numeroTurno+") di: "+giocatore.getNome()+"\n");
+		
 	}
 	
 }
