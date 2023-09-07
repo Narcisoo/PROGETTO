@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import javafx.event.ActionEvent;
@@ -14,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class RegoleController {
@@ -27,14 +30,14 @@ public class RegoleController {
 	private Scene scene;
 	private Parent root;
 	private Stage stage;
-	private static final String nomeFile = "src/Regole.txt";
 	
 	
 	public void scriviTesto() {
 	        areaTesto.setWrapText(true); 
 	        try {
+	        	InputStream ins = getClass().getResourceAsStream("/Regole.txt");
 	            StringBuilder testo = new StringBuilder();
-	            BufferedReader reader = new BufferedReader(new FileReader(nomeFile));
+	            BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
 	            String line;
 
 	            while ((line = reader.readLine()) != null) {

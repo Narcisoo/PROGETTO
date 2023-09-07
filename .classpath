@@ -16,10 +16,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="org.apache.commons.io.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="org.apache.commons.io.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,12 +3,10 @@ package application;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -18,11 +16,9 @@ import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -35,10 +31,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 
 public class ControllerScenaGioco{
@@ -94,7 +88,6 @@ public class ControllerScenaGioco{
 	private boolean puoiPescare=true;
 	private boolean pescaDaEvento = false;
 	private String codice;
-	private static final String nomeFile = "src/Highscore.csv";
 	private boolean isTorneo = false;
 	private int nMatch;
 	private boolean isBot = false;
@@ -213,7 +206,11 @@ public class ControllerScenaGioco{
 		immaginePila();
 		immagineMazzo();
 		areaTesto.setFont(Font.font("Georgia", 12));
-		areaTesto.appendText("Turno ("+numeroTurno+") di: "+giocatore.getNome()+"\n");
+		if(turnoGiocatore) {
+			areaTesto.appendText("Turno ("+numeroTurno+") di: "+giocatore.getNome()+"\n");}
+			else {
+				areaTesto.appendText("Turno ("+numeroTurno+") di: "+avversario.getNome()+"\n");
+			}
 	}
 	
 	//imposta le immagini delle carte nella mano del giocatore, e il retro in quelle dell'avversario
@@ -425,7 +422,6 @@ public class ControllerScenaGioco{
 				try {
 					nullEvent();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});	
@@ -433,7 +429,6 @@ public class ControllerScenaGioco{
 				try {
 					nullEvent();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});		
@@ -481,16 +476,16 @@ public class ControllerScenaGioco{
 				try {
 					nullEvent();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
 		}
-		if(mazzoCarte.getSize()==0) {
+		if(mazzoCarte.getSize()==1) {
 			areaTesto.appendText("!! IL mazzo è terminato, il vincitore è colui che ha più punti !!\n");
 			mazzoTerminato = true;
 			checkVittoria(giocatore);
 		}
+		
 		if(puoiPescare||pescaDaEvento) {
 		if(turnoGiocatore) {
 		if(carteGiocatore.size()>=7) {
@@ -617,6 +612,7 @@ public class ControllerScenaGioco{
 				areaTesto.appendText("Carta giocata: "+carta.infoCarta()+", valore carta: "+carta.getPuntiCarta()+"\n");
 				areaTesto.appendText("Le carte corrisopondo perfettamente!\nPeschi un evento!\n");
 				areaTesto.appendText("-  -  -  -  -  -  -  -  -  -  -  -  -  -\n");
+				x+=3;
 				pescaCartaEvento();
 
 			} else if(carta.getColore()==pila.getColore()) {
@@ -872,7 +868,10 @@ public class ControllerScenaGioco{
 				}
 			});		
 			inizializzaImmaginiCarte();
-			}} else {
+			}else {
+				areaTesto.appendText(avversario.getNome()+"non può scartare altre carte\n");
+			}
+			} else {
 				if(carteGiocatore.size()>=1) {
 		Random rnd = new Random();
 		int i = rnd.nextInt(carteGiocatore.size());
@@ -903,7 +902,10 @@ public class ControllerScenaGioco{
 			}
 		});		
 		inizializzaImmaginiCarte();
-				}}
+				}else {
+					areaTesto.appendText(giocatore.getNome()+"non può scartare altre carte\n");
+				}
+				}
 }
 	
 	
@@ -930,19 +932,26 @@ public class ControllerScenaGioco{
 	}
 	
 	private List<String> leggiEdOrdinaClassifica() throws IOException {
-        List<String> scores = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(nomeFile))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                scores.add(line);
-            }
-        }
-        scores.sort((s1, s2) -> {
-            int score1 = Integer.parseInt(s1.split(",")[1]);
-            int score2 = Integer.parseInt(s2.split(",")[1]);
-            return Integer.compare(score2, score1); 
-        });
-        return scores;
+		 List<String> scores = new ArrayList<>();
+	        
+	        try {
+	        	InputStream ins = Classifica.class.getResourceAsStream("/Highscore.csv");
+				BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                scores.add(line);
+	            }
+	            reader.close();
+				ins.close();
+	        }catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	        scores.sort((s1, s2) -> {
+	            int score1 = Integer.parseInt(s1.split(",")[1]);
+	            int score2 = Integer.parseInt(s2.split(",")[1]);
+	            return Integer.compare(score2, score1); 
+	        });
+	        return scores;
     }
 	
 	//controlla se il giocatore ha vinto dopo che ha giocato una carta, si è attivato un evento, o è finito il mazzo
@@ -1029,7 +1038,7 @@ public class ControllerScenaGioco{
 					alert.setHeaderText("Il Vincitore è: "+giocatore.getNome());
 					alert.setContentText("totalizzando "+giocatore.getPuntiGiocatore()+"Punti!");
 					if(alert.showAndWait().get()==ButtonType.OK) {
-						aggiungiAllaClassifica();
+						
 						FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
 						root = loader.load();
 						ScenaTorneoController torneoController = loader.getController();
@@ -1059,7 +1068,7 @@ public class ControllerScenaGioco{
 					alert.setHeaderText("Il Vincitore è: "+avversario.getNome());
 					alert.setContentText("totalizzando "+avversario.getPuntiGiocatore()+"Punti!");
 					if(alert.showAndWait().get()==ButtonType.OK) {
-						aggiungiAllaClassifica();
+						
 						FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
 						root = loader.load();
 						ScenaTorneoController torneoController = loader.getController();
@@ -1092,7 +1101,6 @@ public class ControllerScenaGioco{
 				alert.setHeaderText("Il Vincitore è: "+g.getNome());
 				alert.setContentText("totalizzando "+g.getPuntiGiocatore()+"Punti!");
 				if(alert.showAndWait().get()==ButtonType.OK) {
-					aggiungiAllaClassifica();
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
 					root = loader.load();
 					ScenaTorneoController torneoController = loader.getController();
@@ -1109,7 +1117,6 @@ public class ControllerScenaGioco{
 							try {
 								torneoController.sospendi(stage);
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						});

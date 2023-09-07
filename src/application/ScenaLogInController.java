@@ -6,9 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import org.apache.commons.io.FileUtils;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +20,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -55,7 +53,6 @@ public class ScenaLogInController {
 	private String adminPass = "mascarpone";
 	private String codiceNuova;
 	private String codiceCarica;
-	private static final String nomeFile = "src/Highscore.csv";
 	
 	public void nuovaPartita(ActionEvent event) throws IOException {
 
@@ -85,7 +82,7 @@ public class ScenaLogInController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}});
-		} else if(partitaTorneo.exists()&&!torneoInCorso.exists()&&!torneoConcluso.exists()){
+		} else if(partitaTorneo.getAbsoluteFile().exists()&&!torneoInCorso.getAbsoluteFile().exists()&&!torneoConcluso.getAbsoluteFile().exists()){
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("ScenaTorneo.fxml"));	
 			root = loader.load();
 			ScenaTorneoController torneoController = loader.getController();
@@ -100,7 +97,6 @@ public class ScenaLogInController {
 					try {
 						torneoController.sospendi(stage);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				});
@@ -157,7 +153,7 @@ public class ScenaLogInController {
 		if(codiceCarica.length()<7) {
 		File file = new File("src/partite/"+codiceCarica+"/"+codiceCarica+"_info.txt");
 		File partitaConclusa = new File("src/partite/"+codiceCarica+"/"+codiceCarica+"_concluso.txt");
-		 if (!file.exists()||partitaConclusa.exists()) {
+		 if (!file.getAbsoluteFile().exists()||partitaConclusa.getAbsoluteFile().exists()) {
 			 Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("CODICE NON VALIDO");
 				alert.setHeaderText("Non esiste nessuna partita o torneo in corso con tale codice");
@@ -190,7 +186,7 @@ public class ScenaLogInController {
 		} else {
 			File file = new File("src/tornei/"+codiceCarica+"/"+codiceCarica+"_continua.txt");
 			File torneoConcluso = new File("src/tornei/"+codiceCarica+"/"+codiceCarica+"_concluso.txt");
-			if (!file.exists()||torneoConcluso.exists()) {
+			if (!file.getAbsoluteFile().exists()||torneoConcluso.getAbsoluteFile().exists()) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("CODICE NON VALIDO");
 				alert.setHeaderText("Non esiste nessuna partita o torneo in corso con tale codice");
@@ -273,11 +269,17 @@ public class ScenaLogInController {
 	
 	 private List<String> leggiEdOrdinaClassifica() throws IOException {
 	        List<String> scores = new ArrayList<>();
-	        try (BufferedReader reader = new BufferedReader(new FileReader(nomeFile))) {
+	        
+	        try {
+	        	//InputStream ins = Classifica.class.getResourceAsStream("src/Highscore.csv");
+				BufferedReader reader = new BufferedReader(new FileReader("src/Highscore.csv"));
 	            String line;
 	            while ((line = reader.readLine()) != null) {
 	                scores.add(line);
 	            }
+	            reader.close();
+	        }catch (Exception e) {
+	        	e.printStackTrace();
 	        }
 	        scores.sort((s1, s2) -> {
 	            int score1 = Integer.parseInt(s1.split(",")[1]);
@@ -297,8 +299,8 @@ public class ScenaLogInController {
 				if(alert.showAndWait().get()==ButtonType.OK){
 				File dirPartite = new File("src/partite");
 				File dirTorneo = new File("src/tornei");
-				 FileUtils.cleanDirectory(dirPartite); 
-				 FileUtils.cleanDirectory(dirTorneo); 
+				FileUtils.cleanDirectory(dirPartite);
+				FileUtils.cleanDirectory(dirTorneo); 
 				} else {
 					alert.close();
 				}
