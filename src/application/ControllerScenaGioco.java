@@ -3,6 +3,7 @@ package application;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -911,7 +912,13 @@ public class ControllerScenaGioco{
 	
 	public void classifica() throws IOException{
 		try{
+			File high = new File("src/Highscore.csv");
+			File folder = new File("src");
+			folder.mkdir();
+			if(!high.exists())
+				high.createNewFile();
 			List<String> classificaOrdinata = leggiEdOrdinaClassifica();
+			if(classificaOrdinata.size()>20) {
 			List<String> classificaRidotta = classificaOrdinata.subList(0, 20);
 			String classificaTesto = classificaRidotta.stream().collect(Collectors.joining("\n"));
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -921,6 +928,17 @@ public class ControllerScenaGioco{
 			alert.setContentText(classificaTesto);
 			if(alert.showAndWait().get()==ButtonType.OK) {
 				alert.close();
+			}}
+			else {
+				String classificaTesto = classificaOrdinata.stream().collect(Collectors.joining("\n"));
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("CLASSIFICA");
+				alert.initStyle(StageStyle.TRANSPARENT);
+				alert.setHeaderText("Classifica attuale dei migliori top 20");
+				alert.setContentText(classificaTesto);
+				if(alert.showAndWait().get()==ButtonType.OK) {
+					alert.close();
+				}
 			}
 		}
 		catch(IOException e) {
@@ -935,14 +953,12 @@ public class ControllerScenaGioco{
 		 List<String> scores = new ArrayList<>();
 	        
 	        try {
-	        	InputStream ins = Classifica.class.getResourceAsStream("/Highscore.csv");
-				BufferedReader reader = new BufferedReader(new InputStreamReader(ins));
+				BufferedReader reader = new BufferedReader(new FileReader("src/Highscore.csv"));
 	            String line;
 	            while ((line = reader.readLine()) != null) {
 	                scores.add(line);
 	            }
 	            reader.close();
-				ins.close();
 	        }catch (Exception e) {
 	        	e.printStackTrace();
 	        }
@@ -963,6 +979,7 @@ public class ControllerScenaGioco{
 				areaTesto.appendText(giocatore.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
 				aggiungiAllaClassifica();
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.initStyle(StageStyle.TRANSPARENT);
 				alert.setTitle("MAZZO TERMINATO!");
 				alert.setHeaderText("Il Vincitore è: "+giocatore.getNome());
 				alert.setContentText("totalizzando "+giocatore.getPuntiGiocatore()+"Punti!");
@@ -983,6 +1000,7 @@ public class ControllerScenaGioco{
 				areaTesto.appendText(avversario.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
 				aggiungiAllaClassifica();
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.initStyle(StageStyle.TRANSPARENT);
 				alert.setTitle("MAZZO TERMINATO!");
 				alert.setHeaderText("Il Vincitore è: "+avversario.getNome());
 				alert.setContentText("totalizzando "+avversario.getPuntiGiocatore()+"Punti!");
@@ -1005,7 +1023,8 @@ public class ControllerScenaGioco{
 		if(g.getPuntiGiocatore()>=50) {
 			areaTesto.appendText(g.getNome()+" e' arrivato a 50 punti e si aggiudica la partiata!\n");
 			aggiungiAllaClassifica();
-			Alert alert = new Alert(AlertType.INFORMATION);			
+			Alert alert = new Alert(AlertType.INFORMATION);	
+			alert.initStyle(StageStyle.TRANSPARENT);
 			alert.setTitle("VITTORIA!");
 			alert.setHeaderText("Il Vincitore è: "+g.getNome());
 			alert.setContentText("totalizzando "+g.getPuntiGiocatore()+"Punti!");
@@ -1034,6 +1053,7 @@ public class ControllerScenaGioco{
 					areaTesto.appendText(giocatore.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
 					aggiungiAllaClassifica();
 					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.initStyle(StageStyle.TRANSPARENT);
 					alert.setTitle("MAZZO TERMINATO!");
 					alert.setHeaderText("Il Vincitore è: "+giocatore.getNome());
 					alert.setContentText("totalizzando "+giocatore.getPuntiGiocatore()+"Punti!");
@@ -1064,6 +1084,7 @@ public class ControllerScenaGioco{
 					areaTesto.appendText(avversario.getNome()+" ha totalizzato piu' punti e si aggiudica la partita\n");
 					aggiungiAllaClassifica();
 					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.initStyle(StageStyle.TRANSPARENT);
 					alert.setTitle("MAZZO TERMINATO!");
 					alert.setHeaderText("Il Vincitore è: "+avversario.getNome());
 					alert.setContentText("totalizzando "+avversario.getPuntiGiocatore()+"Punti!");
@@ -1096,7 +1117,8 @@ public class ControllerScenaGioco{
 			if(g.getPuntiGiocatore()>=50) {
 				areaTesto.appendText(g.getNome()+" e' arrivato a 50 punti e si aggiudica la partiata!\n");
 				aggiungiAllaClassifica();
-				Alert alert = new Alert(AlertType.INFORMATION);			
+				Alert alert = new Alert(AlertType.INFORMATION);	
+				alert.initStyle(StageStyle.TRANSPARENT);
 				alert.setTitle("VITTORIA!");
 				alert.setHeaderText("Il Vincitore è: "+g.getNome());
 				alert.setContentText("totalizzando "+g.getPuntiGiocatore()+"Punti!");

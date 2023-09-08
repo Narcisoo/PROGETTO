@@ -576,10 +576,25 @@ public class ScenaTorneoController {
     }
     
     public void classifica() throws IOException {
-    	
-			List<String> classificaOrdinata = leggiEdOrdinaClassifica();
-			List<String> classificaRidotta = classificaOrdinata.subList(0, 20);
-			String classificaTesto = classificaRidotta.stream().collect(Collectors.joining("\n"));
+    	File high = new File("src/Highscore.csv");
+    	File folder = new File("src");
+		folder.mkdir();
+		if(!high.exists())
+			high.createNewFile();
+		List<String> classificaOrdinata = leggiEdOrdinaClassifica();
+		if(classificaOrdinata.size()>20) {
+		List<String> classificaRidotta = classificaOrdinata.subList(0, 20);
+		String classificaTesto = classificaRidotta.stream().collect(Collectors.joining("\n"));
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("CLASSIFICA");
+		alert.initStyle(StageStyle.TRANSPARENT);
+		alert.setHeaderText("Classifica attuale dei migliori top 20");
+		alert.setContentText(classificaTesto);
+		if(alert.showAndWait().get()==ButtonType.OK) {
+			alert.close();
+		}	
+		} else {
+			String classificaTesto = classificaOrdinata.stream().collect(Collectors.joining("\n"));
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("CLASSIFICA");
 			alert.initStyle(StageStyle.TRANSPARENT);
@@ -587,7 +602,8 @@ public class ScenaTorneoController {
 			alert.setContentText(classificaTesto);
 			if(alert.showAndWait().get()==ButtonType.OK) {
 				alert.close();
-			}			
+			}	
+		}
     }
 
     private List<String> leggiEdOrdinaClassifica() throws IOException {

@@ -52,5 +52,15 @@
             <Font name="Georgia" size="16.0" />
          </font>
       </Button>
+      <Button fx:id="adminButton" alignment="CENTER" contentDisplay="CENTER" layoutX="339.0" layoutY="355.0" mnemonicParsing="false" onAction="#setAdmin" prefHeight="31.0" prefWidth="105.0" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 50%;" text="Admin" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="botButton" alignment="CENTER" contentDisplay="CENTER" layoutX="466.0" layoutY="355.0" mnemonicParsing="false" onAction="#setBot" prefHeight="31.0" prefWidth="105.0" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 50%;" text="Bot" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="16.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

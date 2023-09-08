@@ -14,7 +14,7 @@
             <Font name="Georgia Bold" size="35.0" />
          </font>
       </Label>
-      <Label fx:id="codice" alignment="CENTER" contentDisplay="CENTER" layoutX="208.0" layoutY="298.0" prefHeight="56.0" prefWidth="222.0" style="-fx-background-color: #74798c;" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="codice" alignment="CENTER" contentDisplay="CENTER" layoutX="208.0" layoutY="276.0" prefHeight="56.0" prefWidth="222.0" style="-fx-background-color: #74798c;" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Georgia" size="44.0" />
          </font></Label>
@@ -22,7 +22,7 @@
          <font>
             <Font name="Georgia" size="16.0" />
          </font></Button>
-      <FlowPane fx:id="nomiGiocatori" alignment="CENTER" hgap="10.0" layoutX="-1.0" layoutY="75.0" prefHeight="208.0" prefWidth="600.0" vgap="20.0">
+      <FlowPane fx:id="nomiGiocatori" alignment="CENTER" hgap="10.0" layoutY="53.0" prefHeight="208.0" prefWidth="600.0" vgap="20.0">
          <children>
             <TextField fx:id="T0" prefHeight="50.0" prefWidth="130.0" promptText="Nome Giocatore 1">
                <font>
@@ -66,14 +66,19 @@
             </TextField>
          </children>
       </FlowPane>
-      <Button fx:id="bottoneCreaTorneo" alignment="TOP_LEFT" layoutX="85.0" layoutY="296.0" mnemonicParsing="false" onAction="#creaTorneo" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 5%;" text="Crea" textFill="WHITE">
+      <Button fx:id="bottoneCreaTorneo" alignment="TOP_LEFT" layoutX="89.0" layoutY="274.0" mnemonicParsing="false" onAction="#creaTorneo" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 5%;" text="Crea" textFill="WHITE">
          <font>
             <Font name="Georgia" size="33.0" />
          </font></Button>
-      <Label layoutX="211.0" layoutY="268.0" text="CODICE TORNEO:" textFill="WHITE">
+      <Label layoutX="211.0" layoutY="246.0" text="CODICE TORNEO:" textFill="WHITE">
          <font>
             <Font name="Georgia" size="25.0" />
          </font>
       </Label>
+      <Button fx:id="adminButton" alignment="CENTER" layoutX="18.0" layoutY="349.0" mnemonicParsing="false" onAction="#setAdmin" style="-fx-background-color: #19244d; -fx-background-radius: 10% 5% 50% 50%;" text="Admin" textFill="WHITE">
+         <font>
+            <Font name="Georgia" size="16.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

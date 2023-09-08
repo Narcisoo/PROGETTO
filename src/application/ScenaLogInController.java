@@ -49,8 +49,8 @@ public class ScenaLogInController {
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
-	private String adminUser = "albicocche";
-	private String adminPass = "mascarpone";
+	private static String adminUser = "AdminNP";
+	private String adminPass = "spacchi";
 	private String codiceNuova;
 	private String codiceCarica;
 	
@@ -133,8 +133,13 @@ public class ScenaLogInController {
 	}
 	
 	public void classifica(ActionEvent event) throws IOException {
-
+		File high = new File("src/Highscore.csv");
+		File folder = new File("src");
+		folder.mkdir();
+		if(!high.exists())
+			high.createNewFile();
 		List<String> classificaOrdinata = leggiEdOrdinaClassifica();
+		if(classificaOrdinata.size()>20) {
 		List<String> classificaRidotta = classificaOrdinata.subList(0, 20);
 		String classificaTesto = classificaRidotta.stream().collect(Collectors.joining("\n"));
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -144,7 +149,19 @@ public class ScenaLogInController {
 		alert.setContentText(classificaTesto);
 		if(alert.showAndWait().get()==ButtonType.OK) {
 			alert.close();
-		}		
+		}	
+		} else {
+			String classificaTesto = classificaOrdinata.stream().collect(Collectors.joining("\n"));
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("CLASSIFICA");
+			alert.initStyle(StageStyle.TRANSPARENT);
+			alert.setHeaderText("Classifica attuale dei migliori top 20");
+			alert.setContentText(classificaTesto);
+			if(alert.showAndWait().get()==ButtonType.OK) {
+				alert.close();
+			}	
+		}
+		
 	}
 	
 	public void caricaPartita(ActionEvent event) throws IOException{
@@ -280,6 +297,7 @@ public class ScenaLogInController {
 	            reader.close();
 	        }catch (Exception e) {
 	        	e.printStackTrace();
+	        
 	        }
 	        scores.sort((s1, s2) -> {
 	            int score1 = Integer.parseInt(s1.split(",")[1]);
@@ -297,8 +315,12 @@ public class ScenaLogInController {
 			 alert.setHeaderText("Stai per eliminare tutte le partite ed i tornei in corso!");
 			 alert.setContentText("Sei sicuro di voler continuare?");
 				if(alert.showAndWait().get()==ButtonType.OK){
+					File folder = new File("src");
+					folder.mkdir();
 				File dirPartite = new File("src/partite");
 				File dirTorneo = new File("src/tornei");
+				dirPartite.mkdir();
+				dirTorneo.mkdir();
 				FileUtils.cleanDirectory(dirPartite);
 				FileUtils.cleanDirectory(dirTorneo); 
 				} else {
@@ -317,6 +339,10 @@ public class ScenaLogInController {
 					alert.close();
 				}
 			}
+	 }
+	 
+	 public static String getAdmin() {
+		 return adminUser;
 	 }
 	 
 	 

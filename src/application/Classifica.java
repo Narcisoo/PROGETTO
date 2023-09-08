@@ -20,7 +20,6 @@ public class Classifica {
 		
 		Map<String, Integer> scores = new HashMap<>();
 		try {
-			//InputStream ins = Classifica.class.getResourceAsStream("/Highscore.csv");
 			BufferedReader reader = new BufferedReader(new FileReader("src/Highscore.csv"));
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -37,7 +36,6 @@ public class Classifica {
 
 	private static void scriviPunteggiSuFile(Map<String, Integer> scores) throws IOException {
 		try {
-			//OutputStream ous = new FileOutputStream("/Highscore.csv");
 			BufferedWriter writer = new BufferedWriter (new FileWriter("src/Highscore.csv"));
 			for (Map.Entry<String, Integer> entry : scores.entrySet()) {
 				writer.write(entry.getKey() + "," + entry.getValue());

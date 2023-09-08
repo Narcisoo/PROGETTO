@@ -53,6 +53,8 @@ public class TorneoAdminController {
 	  	private TextField T6;
 		@FXML
 	  	private TextField T7;
+		@FXML
+		private Button adminButton;
 
 	  
 	    private Stage stage;
@@ -140,6 +142,17 @@ public class TorneoAdminController {
 				
 				return giocatoreAssente;
 			}
+			
+			
+			 public void setAdmin() {
+				 for(int i= 0; i <nomiGiocatori.getChildren().size(); i++) {
+					 if(((TextField) nomiGiocatori.getChildren().get(i)).getText().isBlank()) {
+						 ((TextField) nomiGiocatori.getChildren().get(i)).setText(ScenaLogInController.getAdmin());
+						 break;
+					 }
+				 }
+			    	
+			    }
 }
    
 

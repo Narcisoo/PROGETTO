@@ -30,6 +30,10 @@ public class Amichevole1v1Controller {
 	    private TextField giocatore1;
 	    @FXML
 	    private TextField giocatore2;
+	    @FXML
+	    private Button adminButton;
+	    @FXML
+	    private Button botButton;
 	    
 	    private Stage stage;
 	    private Scene scene;
@@ -90,6 +94,14 @@ public class Amichevole1v1Controller {
 		stage.setResizable(false);
 		stage.show();
 	}
+    
+    public void setBot() {
+    	giocatore2.setText("BOT");
+    }
+    
+    public void setAdmin() {
+    	giocatore1.setText(ScenaLogInController.getAdmin());
+    }
     
 }
 
